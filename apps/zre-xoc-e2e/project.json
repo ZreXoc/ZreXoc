@@ -1,0 +1,28 @@
+{
+  "root": "apps/zre-xoc-e2e",
+  "sourceRoot": "apps/zre-xoc-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/zre-xoc-e2e/cypress.json",
+        "devServerTarget": "zre-xoc:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "zre-xoc:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/zre-xoc-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["zre-xoc"]
+}

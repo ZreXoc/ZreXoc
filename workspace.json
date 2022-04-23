@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "zre-xoc": "apps/zre-xoc",
+    "zre-xoc-e2e": "apps/zre-xoc-e2e"
+  }
+}
