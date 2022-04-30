@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 export const Header: FC = () => {
   return (
-    <header className="h-7 bg-purple-800 text-white">
+    <header className="h-7 bg-purple-700 text-white">
       <span>{"ZreXoc's blog!"}</span>
     </header>
   );

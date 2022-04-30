@@ -10,10 +10,8 @@ type ArticleProps = MarkdownRenderingResult;
 const Article: NextPage<ArticleProps> = ({ frontMatter, html }) => {
   return (
     <div className="md:container md:mx-auto">
-      <article>
-        <h1 className="text-3xl font-bold hover:text-gray-700 pb-4">
-          {frontMatter.title}
-        </h1>
+      <article className="prose lg:prose-xl w-full self-center">
+        <h1>{frontMatter.title}</h1>
         <div>by {frontMatter.author.name}</div>
         <hr />
 
