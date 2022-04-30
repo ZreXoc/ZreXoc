@@ -1,7 +1,9 @@
 {
   "version": 2,
   "projects": {
-    "zre-xoc": "apps/zre-xoc",
-    "zre-xoc-e2e": "apps/zre-xoc-e2e"
+    "constants": "libs/constants",
+    "markdown": "libs/markdown",
+    "zrexoc": "apps/zrexoc",
+    "zrexoc-e2e": "apps/zrexoc-e2e"
   }
 }

@@ -1,6 +1,6 @@
 {
-  "root": "apps/zre-xoc",
-  "sourceRoot": "apps/zre-xoc",
+  "root": "apps/zrexoc",
+  "sourceRoot": "apps/zrexoc",
   "projectType": "application",
   "targets": {
     "build": {
@@ -8,8 +8,8 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "root": "apps/zre-xoc",
-        "outputPath": "dist/apps/zre-xoc"
+        "root": "apps/zrexoc",
+        "outputPath": "dist/apps/zrexoc"
       },
       "configurations": {
         "development": {},
@@ -20,16 +20,16 @@
       "executor": "@nrwl/next:server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "zre-xoc:build",
+        "buildTarget": "zrexoc:build",
         "dev": true
       },
       "configurations": {
         "development": {
-          "buildTarget": "zre-xoc:build:development",
+          "buildTarget": "zrexoc:build:development",
           "dev": true
         },
         "production": {
-          "buildTarget": "zre-xoc:build:production",
+          "buildTarget": "zrexoc:build:production",
           "dev": false
         }
       }
@@ -37,14 +37,14 @@
     "export": {
       "executor": "@nrwl/next:export",
       "options": {
-        "buildTarget": "zre-xoc:build:production"
+        "buildTarget": "zrexoc:build:production"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/zre-xoc"],
+      "outputs": ["coverage/apps/zrexoc"],
       "options": {
-        "jestConfig": "apps/zre-xoc/jest.config.ts",
+        "jestConfig": "apps/zrexoc/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -52,7 +52,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/zre-xoc/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["apps/zrexoc/**/*.{ts,tsx,js,jsx}"]
       }
     }
   },

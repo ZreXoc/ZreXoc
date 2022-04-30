@@ -1,6 +1,6 @@
 import { getGreeting } from '../support/app.po';
 
-describe('zre-xoc', () => {
+describe('zrexoc', () => {
   beforeEach(() => cy.visit('/'));
 
   it('should display welcome message', () => {
@@ -8,6 +8,6 @@ describe('zre-xoc', () => {
     cy.login('my-email@something.com', 'myPassword');
 
     // Function helper example, see `../support/app.po.ts` file
-    getGreeting().contains('Welcome zre-xoc');
+    getGreeting().contains('Welcome zrexoc');
   });
 });

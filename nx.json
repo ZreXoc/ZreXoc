@@ -1,5 +1,5 @@
 {
-  "npmScope": "zre-xoc",
+  "npmScope": "zrexoc",
   "affected": {
     "defaultBase": "main"
   },
@@ -17,12 +17,7 @@
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ],
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "ODExNDFkYzAtNmE5NC00YmM1LThiMTItYjY1YjdjNzlhYmE0fHJlYWQtd3JpdGU="
       }
     }
@@ -48,5 +43,5 @@
       }
     }
   },
-  "defaultProject": "zre-xoc"
+  "defaultProject": "zrexoc"
 }

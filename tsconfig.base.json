@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@zrexoc/constants/*": ["libs/constants/src/*"],
+      "@zrexoc/markdown": ["libs/markdown/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
