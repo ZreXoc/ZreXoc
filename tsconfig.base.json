@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@zrexoc/constants/*": ["libs/constants/src/*"],
-      "@zrexoc/markdown": ["libs/markdown/src/index.ts"]
+      "@zrexoc/markdown": ["libs/markdown/src/index.ts"],
+      "@zrexoc/shared/ui": ["libs/shared/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,16 +1,16 @@
 import { MDXRemote } from 'next-mdx-remote';
 import fs from 'fs';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { POSTS_PATH } from '@zrexoc/constants/path';
-import { getParsedFileContentBySlug, renderMarkdown } from '@zrexoc/markdown';
+import { BLOGS_PATH } from '@zrexoc/constants/path';
+import { getParsedFileContentBySlug } from '@zrexoc/markdown';
 import { MarkdownRenderingResult } from '@zrexoc/markdown';
 
-type ArticleProps = MarkdownRenderingResult;
+type BlogProps = MarkdownRenderingResult;
 
-const Article: NextPage<ArticleProps> = ({ frontMatter, html }) => {
+const Blog: NextPage<BlogProps> = ({ frontMatter, html }) => {
   return (
-    <div className="md:container md:mx-auto">
-      <article className="prose lg:prose-xl w-full self-center">
+    <div className="md:container md:mx-auto overflow-y-auto">
+      <article className="mx-auto prose lg:prose-xl w-full self-center">
         <h1>{frontMatter.title}</h1>
         <div>by {frontMatter.author.name}</div>
         <hr />
@@ -21,7 +21,7 @@ const Article: NextPage<ArticleProps> = ({ frontMatter, html }) => {
   );
 };
 
-export default Article;
+export default Blog;
 
 export const getStaticProps: GetStaticProps = async ({
   params,
@@ -30,7 +30,7 @@ export const getStaticProps: GetStaticProps = async ({
 }) => {
   const articleMarkdownContent = await getParsedFileContentBySlug(
     params.slug,
-    POSTS_PATH
+    BLOGS_PATH
   );
 
   return {
@@ -43,7 +43,7 @@ export const getStaticProps: GetStaticProps = async ({
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = fs
-    .readdirSync(POSTS_PATH)
+    .readdirSync(BLOGS_PATH)
     // Remove file extensions for page paths
     .map((path) => path.replace(/\.mdx?$/, ''))
     // Map the path into the static paths object required by Next.js

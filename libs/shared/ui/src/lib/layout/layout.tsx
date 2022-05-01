@@ -1,17 +1,20 @@
 import { FC } from 'react';
-import { Header } from './Header';
+import { Header } from './header';
 
-type LayoutProps = {
+export interface LayoutProps {
+  title: string;
   children?: React.ReactNode;
-};
+}
 
-export const Layout: React.FC<LayoutProps> = ({ children }) => {
+export const Layout: FC<LayoutProps> = ({ children, title }) => {
   return (
     <div className="content-center flex flex-col h-screen overflow-hidden">
-      <Header></Header>
+      <Header title={title}></Header>
       <main className="flex-grow bg-purple-300 w-full overflow-y-auto">
         {children}
       </main>
     </div>
   );
 };
+
+export default Layout;

@@ -1,7 +1,9 @@
 import { resolve } from 'path';
 
-const WORKSPACE_PATH = process.cwd();
+import { workspaceRoot as WORKSPACE_PATH } from '@nrwl/workspace/src/utils/app-root';
 
 const POSTS_PATH = resolve(WORKSPACE_PATH, '_articles');
 
-export { WORKSPACE_PATH, POSTS_PATH };
+const BLOGS_PATH = resolve(POSTS_PATH, 'blogs');
+
+export { WORKSPACE_PATH, POSTS_PATH, BLOGS_PATH };

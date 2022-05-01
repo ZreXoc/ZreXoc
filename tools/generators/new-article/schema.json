@@ -1,0 +1,54 @@
+{
+  "cli": "nx",
+  "id": "new-article",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Post type",
+      "x-prompt": {
+        "message": "Which type of article would you like to generate?",
+        "type": "list",
+        "items": [
+          {
+            "value": "blogs",
+            "label": "Blog"
+          },
+          {
+            "value": "wikis",
+            "label": "Wiki"
+          }
+        ]
+      },
+      "default": "blogs",
+      "alias": "t"
+    },
+
+    "title": {
+      "type": "string",
+      "description": "The title of the article",
+      "x-prompt": "What's the title of your new article?",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "minLength": 1,
+      "maxLength": 10
+    },
+
+    "author": {
+      "type": "string",
+      "description": "The name of the author",
+      "x-prompt": "What's the name of the author?",
+      "default": "ZreXoc"
+    },
+    "excerpt": {
+      "type": "string",
+      "description": "An excerpt that summarizes the blog post in a single line",
+      "x-prompt": "An excerpt that summarizes the article",
+      "alias": "e",
+      "maxLength": 50
+    }
+  },
+  "required": ["title"]
+}
