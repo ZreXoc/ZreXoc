@@ -4,7 +4,7 @@ new Date().toISOString;
 
 export type FrontMatter = {
   title: string;
-  extract: string;
+  excerpt: string;
   time: string;
   update?: Array<{
     version: string;
