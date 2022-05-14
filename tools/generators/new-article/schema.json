@@ -42,6 +42,18 @@
       "x-prompt": "What's the name of the author?",
       "default": "ZreXoc"
     },
+    "category": {
+      "type": "string",
+      "description": "The category of the article",
+      "x-prompt": "What's the category of the article?",
+      "default": "ZreXoc"
+    },
+    "tags": {
+      "type": "string",
+      "description": "The tags of the article",
+      "x-prompt": "What's the tags of the article (split with space)?",
+      "default": "ZreXoc"
+    },
     "excerpt": {
       "type": "string",
       "description": "An excerpt that summarizes the blog post in a single line",
@@ -50,5 +62,5 @@
       "maxLength": 50
     }
   },
-  "required": ["title"]
+  "required": ["title","category"]
 }

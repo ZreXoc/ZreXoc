@@ -11,6 +11,8 @@ interface NewArticleSchemaOptions {
   type: 'blog' | 'wiki';
   title: string;
   author: string;
+  category: string;
+  tags: string;
   excerpt?: string;
 }
 
@@ -29,6 +31,8 @@ export default async function (host: Tree, schema: NewArticleSchemaOptions) {
     {
       title: schema.title,
       author: schema.author,
+      category: schema.category,
+      tags: schema.tags.split(' ').map((s)=>`'${s}'`).join(', '),
       excerpt: schema.excerpt || '',
       normalizedTitle: names(schema.title).fileName,
       creationDate: new Date().toISOString(),
