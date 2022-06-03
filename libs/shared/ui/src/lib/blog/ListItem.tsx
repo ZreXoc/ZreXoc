@@ -17,12 +17,16 @@ export const ListItem: FC<ListItemProps> = ({
   const [trans, setTrans] = useState(0);
   const listRef = useRef<HTMLLIElement>(null);
   useEffect(() => {
-    setTrans(
-      transRelatedFrom
-        ? Math.abs((listRef.current?.offsetTop || 0) - transRelatedFrom)
-        : 0
-    );
+    const ele = listRef.current as HTMLLIElement;
+    if (
+      ele.offsetTop + ele.offsetHeight - (ele.parentElement?.scrollTop || 0) <
+      0
+    )
+      return;
+    const trans = ele.offsetTop - transRelatedFrom;
+    setTrans(trans > 0 ? trans * 0.8 : -trans * 0.7);
   }, [transRelatedFrom]);
+
   return (
     <li
       ref={listRef}

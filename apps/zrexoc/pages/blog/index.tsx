@@ -3,7 +3,7 @@ import { BLOGS_PATH } from '@zrexoc/constants/path';
 import { FrontMatter, getMatterBySlug } from '@zrexoc/markdown';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
-import { ListItem } from '@zrexoc/shared/ui';
+import { BlogList, ListItem } from '@zrexoc/shared/ui';
 import { FC } from 'react';
 
 /* eslint-disable-next-line */
@@ -13,24 +13,22 @@ export interface BlogProps {
   };
 }
 
-const BlogList: FC<{
+/* const BlogList: FC<{
   title: string;
   category: string;
   tags: string[];
 }> = (props) => {
   return <ListItem {...props} />;
 };
-
+ */
 export function Blog({ blogList }: BlogProps) {
   return (
-    <div>
-      <h1>Welcome to my blog!</h1>
-      <ul>
-        {Object.values(blogList).map((data) => (
-          <BlogList key={data.title} {...data} />
-        ))}
-      </ul>
-    </div>
+    <>
+      <div className="flex-grow">text</div>
+      <div className="w-fit">
+        <BlogList posts={blogList} />
+      </div>
+    </>
   );
 }
 

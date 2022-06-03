@@ -4,10 +4,10 @@ import ListItem from './ListItem';
 import { FrontMatter } from '@zrexoc/markdown';
 
 export interface BlogListProps {
-  [slug: string]: FrontMatter;
+  posts: { [slug: string]: FrontMatter };
 }
 
-export const BlogList: FC<BlogListProps> = (props) => {
+export const BlogList: FC<BlogListProps> = ({ posts }) => {
   const [transRelatedFrom, setTransRelatedFrom] = useState(0);
 
   const ref = useRef<HTMLUListElement>(null);
@@ -19,16 +19,16 @@ export const BlogList: FC<BlogListProps> = (props) => {
   return (
     <ul
       ref={ref}
-      className="h-full w-fit overflow-y-auto"
+      className="h-full w-fit overflow-x-hidden overflow-y-auto"
       onScroll={({ currentTarget: ele }) => {
         // console.log(transRelatedFrom, ele.scrollTop);
-        setTransRelatedFrom(ele.scrollTop + ele.clientHeight * 0.6);
+        setTransRelatedFrom(ele.scrollTop + ele.clientHeight * 0.7);
       }}
     >
-      {Object.values(props).map((data, i) => (
+      {Object.values(posts).map((post) => (
         <ListItem
-          key={data.title}
-          {...data}
+          key={post.title}
+          {...post}
           transRelatedFrom={transRelatedFrom}
         />
       ))}
