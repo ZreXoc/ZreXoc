@@ -38,7 +38,7 @@ const Navigator: FC = () => {
         <div className="w-fit m-1 translate-x-[100px]">
           <NavItem title="about" bg={2} to="blog" />
         </div>
-        <div className="w-fit m-1 translate-x-[-33px] translate-y-[-74px]">
+        <div className="w-fit m-1 translate-x-[-50px] translate-y-[-74px]">
           <NavItem title="setting" bg={3} to="blog" />
         </div>
       </div>

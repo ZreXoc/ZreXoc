@@ -1,12 +1,17 @@
 import { Story, Meta } from '@storybook/react';
-import { ListItemProps } from './ListItem';
+import ListItem, { ListItemProps } from './ListItem';
 
 export default {
-  component: ListItemProps,
-  title: 'ListItemProps',
+  component: ListItem,
+  title: 'ListItem',
 } as Meta;
 
-const Template: Story = (args) => <ListItemProps {...args} />;
+const Template: Story<ListItemProps> = (args) => <ListItem {...args} />;
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = {
+  title: 'hi',
+  category: 'test',
+  tags: ['s', 'd'],
+  transRelatedFrom: 0,
+};
