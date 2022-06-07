@@ -11,7 +11,7 @@ export const getMatterBySlug = (slug: string, postsPath: string) => {
   const m = matter(fileContents)
   return {
     ...m,
-    data:m.data as FrontMatter
+    data: m.data as FrontMatter,
   };
 };
 

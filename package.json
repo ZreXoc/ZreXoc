@@ -6,8 +6,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "build:storybook": "nx run shared-ui:build-storybook",
-    "chromatic": "chromatic --project-token=\"96274a3ad00e\" --storybook-build-dir dist/storybook/shared-ui --auto-accept-changes"
+    "build:storybook": "nx run shared-ui:build-storybook"
   },
   "private": true,
   "dependencies": {
@@ -45,11 +44,6 @@
     "@nrwl/storybook": "14.0.2",
     "@nrwl/web": "14.0.2",
     "@nrwl/workspace": "14.0.2",
-    "@storybook/addon-essentials": "~6.4.12",
-    "@storybook/builder-webpack5": "~6.4.12",
-    "@storybook/core-server": "~6.4.12",
-    "@storybook/manager-webpack5": "~6.4.12",
-    "@storybook/react": "~6.4.12",
     "@svgr/webpack": "^5.4.0",
     "@testing-library/react": "13.1.1",
     "@types/jest": "27.4.1",
@@ -60,7 +54,6 @@
     "@typescript-eslint/parser": "~5.18.0",
     "babel-jest": "27.5.1",
     "babel-loader": "8.1.0",
-    "chromatic": "^6.5.4",
     "cypress": "^9.1.0",
     "eslint": "~8.12.0",
     "eslint-config-next": "12.1.5",

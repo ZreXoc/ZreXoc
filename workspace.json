@@ -3,8 +3,6 @@
   "projects": {
     "constants": "libs/constants",
     "markdown": "libs/markdown",
-    "shared-ui": "libs/shared/ui",
-    "storybook-e2e-ui-e2e": "apps/storybook-e2e/ui-e2e",
     "zrexoc": "apps/zrexoc",
     "zrexoc-e2e": "apps/zrexoc-e2e"
   }

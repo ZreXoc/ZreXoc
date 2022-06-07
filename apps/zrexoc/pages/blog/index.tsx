@@ -2,15 +2,14 @@ import fs from 'fs';
 import { BLOGS_PATH } from '@zrexoc/constants/path';
 import { FrontMatter, getMatterBySlug } from '@zrexoc/markdown';
 import { GetStaticProps } from 'next';
-import Link from 'next/link';
-import { BlogList, ListItem } from '@zrexoc/shared/ui';
-import { FC } from 'react';
+import { BlogContext } from '../../contexts/BlogContext';
+import { PostList } from '../../components/blog/PostList';
+import { useState } from 'react';
+import { Detail } from '../../components/blog/Detail';
 
 /* eslint-disable-next-line */
 export interface BlogProps {
-  blogList: {
-    [slug: string]: FrontMatter;
-  };
+  blogList: FrontMatter[];
 }
 
 /* const BlogList: FC<{
@@ -22,22 +21,25 @@ export interface BlogProps {
 };
  */
 export function Blog({ blogList }: BlogProps) {
+  const [selected, selectPost] = useState(blogList[0].title);
   return (
-    <>
-      <div className="flex-grow">text</div>
-      <div className="w-fit">
-        <BlogList posts={blogList} />
+    <BlogContext.Provider value={{ selected, selectPost }}>
+      <div className="flex-grow p-16">
+        <Detail data={blogList.filter((v) => v.title === selected)[0]} />
       </div>
-    </>
+      <div className="w-fit">
+        <PostList posts={blogList} />
+      </div>
+    </BlogContext.Provider>
   );
 }
 
-export const getStaticProps: GetStaticProps = () => {
-  const blogList = {};
-  fs.readdirSync(BLOGS_PATH)
+export const getStaticProps: GetStaticProps<BlogProps> = () => {
+  const blogList = fs
+    .readdirSync(BLOGS_PATH)
     .map((path) => path.replace(/\.mdx?$/, ''))
-    .map((slug) => ({ data: getMatterBySlug(slug, BLOGS_PATH).data, slug }))
-    .forEach(({ data, slug }) => (blogList[slug] = data));
+    .map((slug) => getMatterBySlug(slug, BLOGS_PATH).data)
+    .sort((a, b) => (b.time > a.time ? 1 : -1));
 
   return {
     props: {

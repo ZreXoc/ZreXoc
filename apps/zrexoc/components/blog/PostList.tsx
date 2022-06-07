@@ -1,14 +1,13 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import ListItem from './ListItem';
+import { ListItem } from './ListItem';
 import { FrontMatter } from '@zrexoc/markdown';
 
-export interface BlogListProps {
-  posts: { [slug: string]: FrontMatter };
+export interface PostListProps {
+  posts: FrontMatter[];
 }
 
-export const BlogList: FC<BlogListProps> = ({ posts }) => {
-  const [transRelatedFrom, setTransRelatedFrom] = useState(0);
+export const PostList: FC<PostListProps> = ({ posts }) => {
+  const [transRelatedFrom, setTransRelatedFrom] = useState<number>(0);
 
   const ref = useRef<HTMLUListElement>(null);
 
@@ -25,7 +24,7 @@ export const BlogList: FC<BlogListProps> = ({ posts }) => {
         setTransRelatedFrom(ele.scrollTop + ele.clientHeight * 0.7);
       }}
     >
-      {Object.values(posts).map((post) => (
+      {posts.map((post) => (
         <ListItem
           key={post.title}
           {...post}
@@ -35,5 +34,3 @@ export const BlogList: FC<BlogListProps> = ({ posts }) => {
     </ul>
   );
 };
-
-export default BlogList;
