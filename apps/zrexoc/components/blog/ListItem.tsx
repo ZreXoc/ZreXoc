@@ -38,7 +38,7 @@ export const ListItem: FC<ListItemProps> = ({
       return;
     const newTrans = ele.offsetTop - transRelatedFrom;
     // if (selected) trans += 50;
-    setTrans(newTrans > 0 ? newTrans * 0.8 : -newTrans * 0.7);
+    setTrans(newTrans > 0 ? newTrans * 0.3 : -newTrans * 0.2);
   }, [transRelatedFrom, isSelected]);
 
   return (

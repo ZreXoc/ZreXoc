@@ -35,6 +35,12 @@
       "minLength": 1,
       "maxLength": 10
     },
+    "path": {
+      "type": "string",
+      "description": "The path of the article",
+      "x-prompt": "Where to generate your new article?",
+      "default": ""
+    },
 
     "author": {
       "type": "string",
@@ -45,14 +51,12 @@
     "category": {
       "type": "string",
       "description": "The category of the article",
-      "x-prompt": "What's the category of the article?",
-      "default": "ZreXoc"
+      "x-prompt": "What's the category of the article?"
     },
     "tags": {
       "type": "string",
       "description": "The tags of the article",
-      "x-prompt": "What's the tags of the article (split with space)?",
-      "default": "ZreXoc"
+      "x-prompt": "What's the tags of the article (split with space)?"
     },
     "excerpt": {
       "type": "string",

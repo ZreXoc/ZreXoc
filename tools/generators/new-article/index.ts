@@ -10,6 +10,7 @@ import {
 interface NewArticleSchemaOptions {
   type: 'blog' | 'wiki';
   title: string;
+  path?: string;
   author: string;
   category: string;
   tags: string;
@@ -32,9 +33,13 @@ export default async function (host: Tree, schema: NewArticleSchemaOptions) {
       title: schema.title,
       author: schema.author,
       category: schema.category,
-      tags: schema.tags.split(' ').map((s)=>`'${s}'`).join(', '),
+      tags: schema.tags
+        .split(' ')
+        .map((s) => `'${s}'`)
+        .join(', '),
       excerpt: schema.excerpt || '',
-      normalizedTitle: names(schema.title).fileName,
+      normalizedTitle:
+        schema.path !== '' ? schema.path : names(schema.title).fileName,
       creationDate: new Date().toISOString(),
     }
   );

@@ -1,0 +1,14 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_REGISTRIES_MISMATCH",
+    "err": {
+      "name": "pnpm",
+      "message": "This modules directory was created using the following registries configuration: {\"default\":\"https://registry.npm.taobao.org/\"}. The current configuration is {\"default\":\"https://registry.npmmirror.com/\"}. To recreate the modules directory using the new settings, run \"pnpm install\".",
+      "code": "ERR_PNPM_REGISTRIES_MISMATCH",
+      "stack": "pnpm: This modules directory was created using the following registries configuration: {\"default\":\"https://registry.npm.taobao.org/\"}. The current configuration is {\"default\":\"https://registry.npmmirror.com/\"}. To recreate the modules directory using the new settings, run \"pnpm install\".\n    at validateModules (/home/zrx/.local/share/pnpm/global/5/.pnpm/registry.npmmirror.com+pnpm@7.1.9/node_modules/pnpm/dist/pnpm.cjs:93351:15)\n    at async getContext (/home/zrx/.local/share/pnpm/global/5/.pnpm/registry.npmmirror.com+pnpm@7.1.9/node_modules/pnpm/dist/pnpm.cjs:93221:28)\n    at async mutateModules (/home/zrx/.local/share/pnpm/global/5/.pnpm/registry.npmmirror.com+pnpm@7.1.9/node_modules/pnpm/dist/pnpm.cjs:120159:19)\n    at async Object.handler (/home/zrx/.local/share/pnpm/global/5/.pnpm/registry.npmmirror.com+pnpm@7.1.9/node_modules/pnpm/dist/pnpm.cjs:122825:32)\n    at async /home/zrx/.local/share/pnpm/global/5/.pnpm/registry.npmmirror.com+pnpm@7.1.9/node_modules/pnpm/dist/pnpm.cjs:182795:21\n    at async run (/home/zrx/.local/share/pnpm/global/5/.pnpm/registry.npmmirror.com+pnpm@7.1.9/node_modules/pnpm/dist/pnpm.cjs:182769:34)\n    at async runPnpm (/home/zrx/.local/share/pnpm/global/5/.pnpm/registry.npmmirror.com+pnpm@7.1.9/node_modules/pnpm/dist/pnpm.cjs:182987:5)\n    at async /home/zrx/.local/share/pnpm/global/5/.pnpm/registry.npmmirror.com+pnpm@7.1.9/node_modules/pnpm/dist/pnpm.cjs:182979:7"
+    }
+  }
+}

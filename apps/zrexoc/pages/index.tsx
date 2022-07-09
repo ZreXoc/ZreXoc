@@ -1,6 +1,8 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 
+
+
 export const Index: NextPage = () => {
   return (
     <article className="mx-16 my-16 prose lg:prose-xl w-full ">
