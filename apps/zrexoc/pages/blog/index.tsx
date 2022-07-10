@@ -24,9 +24,7 @@ export function Blog({ blogList }: BlogProps) {
   const [selected, selectPost] = useState(blogList[0].title);
   return (
     <BlogContext.Provider value={{ selected, selectPost }}>
-      <div className="flex-grow p-16">
-        <Detail data={blogList.filter((v) => v.title === selected)[0]} />
-      </div>
+      <Detail data={blogList.filter((v) => v.title === selected)[0]} />
       <div className="w-fit">
         <PostList posts={blogList} />
       </div>

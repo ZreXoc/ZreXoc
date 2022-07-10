@@ -12,6 +12,7 @@
   "dependencies": {
     "@babel/core": "^7.17.10",
     "@babel/preset-env": "^7.17.10",
+    "@heroicons/react": "^1.0.6",
     "@nrwl/next": "14.0.2",
     "@tailwindcss/typography": "^0.5.2",
     "autoprefixer": "^10.4.4",

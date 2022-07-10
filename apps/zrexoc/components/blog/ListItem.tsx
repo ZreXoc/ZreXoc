@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 
 export interface ListItemProps {
   title: string;
+  slug: string;
   category: string;
   tags: string[];
   transRelatedFrom?: number;
@@ -12,6 +13,7 @@ export interface ListItemProps {
 
 export const ListItem: FC<ListItemProps> = ({
   title,
+  slug,
   category,
   tags,
   transRelatedFrom = 0,
@@ -49,7 +51,7 @@ export const ListItem: FC<ListItemProps> = ({
         transform: `translateX(${trans}px)`,
       }}
       onClick={() =>
-        isSelected ? route.push(`/blog/${title}`) : selectPost(title)
+        isSelected ? route.push(`/blog/${slug}`) : selectPost(title)
       }
     >
       <Image
@@ -61,9 +63,12 @@ export const ListItem: FC<ListItemProps> = ({
       <div className="relative z-10 h-full leading-[0]">
         <span
           className={
+            'table-cell h-[59px] w-full pl-14 align-middle text-3xl'
+            /*
             isSelected
               ? 'table-cell h-[59px] w-full pl-14 align-middle text-3xl text-blue-700'
-              : 'table-cell h-[59px] w-full pl-14 align-middle text-3xl'
+              : 'table-cell h-[59px] w-full pl-14 align-middle text-3xl' 
+            */
           }
         >
           {title}

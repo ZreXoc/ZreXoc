@@ -8,10 +8,10 @@ export const getMatterBySlug = (slug: string, postsPath: string) => {
   const postFilePath = join(postsPath, `${slug}.mdx`);
   const fileContents = fs.readFileSync(postFilePath);
 
-  const m = matter(fileContents)
+  const m = matter(fileContents);
   return {
     ...m,
-    data: m.data as FrontMatter,
+    data: { slug, ...m.data } as FrontMatter,
   };
 };
 
@@ -19,15 +19,12 @@ export const getParsedFileContentBySlug = async (
   slug: string,
   postsPath: string
 ): Promise<MarkdownRenderingResult> => {
-  const postFilePath = join(postsPath, `${slug}.mdx`);
-  const fileContents = fs.readFileSync(postFilePath);
-
-  const { data, content } = matter(fileContents);
+  const { data, content } = getMatterBySlug(slug, postsPath);
 
   const html = await renderMarkdown(content);
 
   return {
-    frontMatter: data as FrontMatter,
+    frontMatter: data,
     html,
   };
 };

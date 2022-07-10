@@ -9,7 +9,7 @@ type BlogProps = MarkdownRenderingResult;
 
 const Blog: NextPage<BlogProps> = ({ frontMatter, html }) => {
   return (
-    <div className="md:container md:mx-auto overflow-y-auto">
+    <div className="md:container md:mx-auto overflow-y-auto m-4">
       <article className="mx-auto prose lg:prose-xl w-full self-center">
         <h1>{frontMatter.title}</h1>
         <div>by {frontMatter.author.name}</div>
