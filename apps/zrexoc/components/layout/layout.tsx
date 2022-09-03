@@ -8,7 +8,7 @@ export interface LayoutProps {
 
 export const Layout: FC<LayoutProps> = ({ children, title }) => {
   return (
-    <div className="content-center flex flex-col h-screen overflow-hidden">
+    <div className="content-center flex flex-col h-screen overflow-hidden bg-slate-200">
       <Header title={title}></Header>
       <main className="container mx-auto flex flex-grow overflow-y-auto text-white">
         {children}

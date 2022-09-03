@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { BLOGS_PATH } from '@zrexoc/constants/path';
+import { BLOGS_PATH } from '@zrexoc/constants';
 import { FrontMatter, getMatterBySlug } from '@zrexoc/markdown';
 import { GetStaticProps } from 'next';
 import { BlogContext } from '../../contexts/BlogContext';

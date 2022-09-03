@@ -18,19 +18,21 @@ export const PostList: FC<PostListProps> = ({ posts }) => {
   return (
     <ul
       ref={ref}
-      className="h-full w-fit overflow-x-hidden overflow-y-auto"
+      className="menu h-full w-fit overflow-x-hidden overflow-y-auto bg-slate-200 text-black scrollbar-thin scrollbar-thumb-gray-900"
       onScroll={({ currentTarget: ele }) => {
         // console.log(transRelatedFrom, ele.scrollTop);
         setTransRelatedFrom(ele.scrollTop + ele.clientHeight * 0.7);
       }}
     >
-      {posts.map((post) => (
-        <ListItem
-          key={post.title}
-          {...post}
-          transRelatedFrom={transRelatedFrom}
-        />
-      ))}
+      {
+        /* posts */ new Array(20).fill(posts[0]).map((post) => (
+          <ListItem
+            key={post.title+Math.random()}
+            {...post}
+            transRelatedFrom={transRelatedFrom}
+          />
+        ))
+      }
     </ul>
   );
 };

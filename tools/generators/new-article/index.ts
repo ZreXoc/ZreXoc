@@ -27,7 +27,7 @@ export default async function (host: Tree, schema: NewArticleSchemaOptions) {
     joinPathFragments(__dirname, './files'),
 
     // where the files should be generated
-    `./_articles/${schema.type}/${creationTime.getFullYear()}`,
+    `./_articles/${schema.type}/`,
 
     // the variables to be substituted in the template
     {

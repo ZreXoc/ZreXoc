@@ -44,7 +44,10 @@ export const ListItem: FC<ListItemProps> = ({
   }, [transRelatedFrom, isSelected]);
 
   return (
-    <li
+    <li className='w-96 my-2 bg-slate-300' onMouseEnter={()=>selectPost(title)}>
+      <a className='skew-x-3'>{title}</a>
+    </li>
+   /*  <li
       ref={listRef}
       className="list-none relative w-[546.67px] h-[80px] my-3 cursor-pointer"
       style={{
@@ -68,7 +71,7 @@ export const ListItem: FC<ListItemProps> = ({
             isSelected
               ? 'table-cell h-[59px] w-full pl-14 align-middle text-3xl text-blue-700'
               : 'table-cell h-[59px] w-full pl-14 align-middle text-3xl' 
-            */
+            * /
           }
         >
           {title}
@@ -78,6 +81,6 @@ export const ListItem: FC<ListItemProps> = ({
           {`${category} | ${tags.join(',')}`}
         </span>
       </div>
-    </li>
+    </li> */
   );
 };
