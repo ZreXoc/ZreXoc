@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@zrexoc/constants/*": ["libs/constants/src/*"],
+      "@zrexoc/constants": ["libs/constants/src/index.ts"],
       "@zrexoc/markdown": ["libs/markdown/src/index.ts"],
       "@zrexoc/shared/ui": ["libs/shared/ui/src/index.ts"],
       "~/*": ["apps/zrexoc/*"]

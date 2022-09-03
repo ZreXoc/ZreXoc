@@ -18,6 +18,7 @@ interface NewArticleSchemaOptions {
 }
 
 export default async function (host: Tree, schema: NewArticleSchemaOptions) {
+  const creationTime =  new Date()
   generateFiles(
     // virtual file system
     host,
@@ -26,7 +27,7 @@ export default async function (host: Tree, schema: NewArticleSchemaOptions) {
     joinPathFragments(__dirname, './files'),
 
     // where the files should be generated
-    `./_articles/${schema.type}`,
+    `./_articles/${schema.type}/${creationTime.getFullYear()}`,
 
     // the variables to be substituted in the template
     {
@@ -40,7 +41,7 @@ export default async function (host: Tree, schema: NewArticleSchemaOptions) {
       excerpt: schema.excerpt || '',
       normalizedTitle:
         schema.path !== '' ? schema.path : names(schema.title).fileName,
-      creationDate: new Date().toISOString(),
+      creationTime:creationTime.toISOString(),
     }
   );
 

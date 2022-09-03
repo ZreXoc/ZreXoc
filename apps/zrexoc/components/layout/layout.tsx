@@ -10,7 +10,7 @@ export const Layout: FC<LayoutProps> = ({ children, title }) => {
   return (
     <div className="content-center flex flex-col h-screen overflow-hidden">
       <Header title={title}></Header>
-      <main className="flex flex-grow bg-purple-300 w-full overflow-y-auto">
+      <main className="container mx-auto flex flex-grow overflow-y-auto text-white">
         {children}
       </main>
     </div>
