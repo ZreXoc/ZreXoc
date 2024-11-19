@@ -1,0 +1,47 @@
+---
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+import Layout from "@/layouts/Layout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { toIcon } from "@/utils/icon";
+import { Icon } from "astro-icon/components";
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+  const blogEntries: CollectionEntry<"blog">[] = await getCollection("blog");
+  return blogEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+// 2. For your template, you can get the entry directly from the prop
+const { entry } = Astro.props;
+const data = entry.data;
+const { Content, remarkPluginFrontmatter } = await entry.render();
+const { minutesRead } = remarkPluginFrontmatter;
+
+const lastModified = dayjs(remarkPluginFrontmatter.lastModified)
+  .utc()
+  .format("HH:mm:ss DD MMMM YYYY UTC");
+---
+
+<Layout title={entry.data.title}>
+  <div class="w-full">
+    <div class="mx-auto mt-4 prose lg:prose-xl">
+      <h1>{data.title}</h1>
+      <p class="flex flex-row divide-x-2 divide-solid divide-slate-200">
+        <span class="inline-flex pr-2 gap-2">
+          {
+            data.tags
+              .map((t) => toIcon(t))
+              .slice(0, 2)
+              .map((t) => <Icon class="h-auto" name={t} />)
+          }
+        </span>
+        {[lastModified, minutesRead].map((t) => <span class="px-2">{t}</span>)}
+      </p>
+      <hr />
+      <Content />
+    </div>
+  </div>
+</Layout>

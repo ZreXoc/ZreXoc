@@ -1,0 +1,105 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
+
+import { toIcon } from "@utils/icon";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+
+interface Props {
+  entry: CollectionEntry<"blog">;
+}
+
+const { entry } = Astro.props;
+const data = entry.data;
+const { remarkPluginFrontmatter } = await entry.render();
+const { minutesRead } = remarkPluginFrontmatter;
+
+const lastModified = dayjs(remarkPluginFrontmatter.lastModified)
+  .utc()
+  .format("HH:mm:ss DD MMMM YYYY UTC");
+//const matches = await Astro.glob('../../content/blog/*.mdx');
+
+////const posts = Object.values(matches);
+//const preview = matches[0].foo
+////console.log(matches[0].Content)
+//console.log(preview)
+////console.log(matches[0].title)
+---
+
+<style>
+  .preview-post.active .description {
+    animation: fade 200ms;
+  }
+  .preview-post.active .image {
+    animation: rotate 200ms;
+  }
+
+  @keyframes fade {
+    
+    0% {
+      opacity: 0.9;
+      filter: drop-shadow(0px 0px 0px);
+    }
+
+    60% {
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes rotate {
+    0% {
+      opacity: 0.9;
+      transform: rotate(0deg);
+      filter: drop-shadow(0px 0px 0px);
+    }
+
+    60% {
+      filter: drop-shadow(12px 12px 0px);
+    }
+    100% {
+      opacity: 1;
+      transform: rotate(4deg);
+      filter: drop-shadow(24px 24px 0px);
+    }
+  }
+</style>
+
+<div
+  class="preview-post h-full w-full pl-8 lg:pl-[10%] border-solid border-slate-300"
+>
+  <div
+    class="image w-full max-w-96 lg:max-w-[28rem] mb-12 aspect-square bg-slate-600 text-white rotate-[4deg] drop-shadow-[24px_24px_0px] shadow-lg"
+  >
+    <!--image placeholder-->
+    <!--<Preview client:load/>-->
+    {
+      entry.data.preview ? (
+        <Image src={entry.data.preview} alt={entry.data.title} />
+      ) : null
+    }
+  </div>
+  <div class="prose">
+    <h2 class="text-4xl">
+      {data.title}
+    </h2>
+    <p class="flex flex-row divide-x-2 divide-solid divide-slate-200">
+      <span class="inline-flex pr-2 gap-1">
+        {
+          data.tags
+            .map((t) => toIcon(t))
+            .slice(0,2)
+            .map((t) => <Icon class="h-auto" name={t} />)
+        }
+      </span>
+      {[lastModified, minutesRead].map((t) => <span class="px-2">{t}</span>)}
+    </p>
+    <p class="description">
+      {data.description}
+    </p>
+  </div>
+</div>

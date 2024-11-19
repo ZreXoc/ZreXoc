@@ -1,0 +1,42 @@
+{
+/*
+  <div class="ml-10">
+  <div class="relative h-20">
+    <div class="absolute w-full h-full bg-fuchsia-400 skew-x-[-20deg] z-[-1]"></div>
+    <div class="ml-12">
+      <span>123</span>
+    </div>
+  </div>
+  <div class="relative h-4">
+    <div class="absolute w-full h-full bg-fuchsia-400 skew-x-[10deg] z-[-1]"></div>
+    <div class="ml-12">
+      <span>123</span>
+    </div>
+  </div>
+</div>
+*/
+}
+
+<div class="hex-wrap">
+  <div class="hex-clip h-24 bg-slate-300">
+    <div class="content h-3/4 ml-[25px]">
+      <slot name='content'/>
+    </div>
+    <div class="content h-1/4 pl-[25px] bg-gray-400">
+      <slot name='footer'/>
+    </div>
+  </div>
+</div>
+
+<style>
+.hex-wrap {
+  filter: drop-shadow(20px 8px 0px theme('colors.gray.300'));
+}
+  .hex-clip {
+    clip-path: polygon(25px 0%, 100% 0, 100% 100%, 15px 100%, 0 75%);
+  }
+
+  .selected {
+    margin-left: 0;
+  }
+</style>

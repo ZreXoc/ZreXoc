@@ -1,0 +1,174 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PostList from "@/components/post/PostList.astro";
+import PreviewPost from "@components/post/PreviewPost.astro";
+import { getEntry, getEntries, getCollection } from "astro:content";
+import { fade } from "astro:transitions";
+
+const blogPost = await getEntry("blog", "post-1");
+let allPosts = await getCollection("blog");
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection("blog");
+  return blogEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+//console.log(allPosts);
+//allPosts = [...allPosts, ...allPosts];
+//allPosts = [...allPosts, ...allPosts];
+//allPosts = [...allPosts, ...allPosts];
+---
+
+<script>
+  let container: HTMLElement | null;
+
+  let hexlists: NodeListOf<HTMLLIElement>;
+  let previews: NodeListOf<HTMLDivElement>;
+
+  let selectedId: string;
+  const pair = new Map<string, [HTMLLIElement | null, HTMLDivElement | null]>();
+  document.addEventListener("astro:after-swap", setOffset);
+  document.addEventListener("astro:page-load", () => {
+    container = document.getElementById("hexlists");
+    hexlists = document.querySelectorAll<HTMLLIElement>("#hexlists .post-list");
+    previews = document.querySelectorAll<HTMLDivElement>("#previews div");
+
+    if (!container) return;
+
+    hexlists.forEach((li) => {
+      const id = li.dataset.id;
+      if (id) {
+        pair.set(id, [li, null]); // 先将值设置为 null
+      }
+    });
+
+    // 遍历 previews，根据 dataset.id 进行配对
+    previews.forEach((div) => {
+      const id = div.dataset.id;
+      if (id && pair.has(id)) {
+        const li = pair.get(id)?.[0] ?? null;
+        pair.set(id, [li, div]); // 将对应的 div 存入 Map
+      }
+    });
+
+    setOffset();
+    container?.addEventListener("scroll", setOffset);
+
+    hexlists.forEach((el, idx) => {
+      const id = el.dataset["id"];
+      if (id)
+        el.addEventListener("mouseenter", (e) => {
+          switchSelected(id);
+          if (container?.dataset["id"] !== id)
+            location.href = `./${el.dataset["slug"]}`;
+        });
+    });
+
+    if (container.dataset["selected"])
+      switchSelected(container.dataset["selected"]);
+
+    //switchSelected(pair.keys().next().value);
+  });
+
+  function setOffset() {
+    if (!container) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const containerHeight = containerRect.height; // 获取元素的位置信息
+    hexlists.forEach((el, idx) => {
+      const childRect = el.getBoundingClientRect();
+      if (selectedId == el.dataset["id"]) {
+        el.style.marginLeft = "unset";
+        return;
+      }
+
+      const relativeY = childRect.top - containerRect.top;
+      const delta = Math.min(relativeY, containerRect.height - relativeY);
+      const calcML = (dy: number) => (dy < 0 ? -dy * 0.2 : dy * 0.8);
+
+      el.style.marginLeft = `${calcML(relativeY - containerRect.height * 0.7)}px`;
+    });
+  }
+
+  function switchSelected(id: string) {
+    if (id == selectedId) {
+      //location.assign(`?post=${id}`)
+      return;
+    } //TODO: jump
+    const p = pair.get(id);
+    if (!p) return;
+    const [li, preview] = p;
+    if (!li || !preview) {
+      console.error(`post list or preview for ${id} not found`);
+      return;
+    }
+
+    unselect(selectedId);
+
+    preview.classList.remove("hidden");
+    preview.classList.add("contents");
+    li.classList.add("selected");
+
+    selectedId = id;
+
+    setOffset();
+    //li.style.marginLeft = '0px';
+  }
+
+  function unselect(id: string) {
+    if (!id) return;
+    const p = pair.get(id);
+    if (!p) return;
+    const [li, preview] = p;
+
+    preview?.classList.add("hidden");
+  }
+</script>
+
+<script is:inline>
+  function setOffset() {
+    const container = document.getElementById("hexlists");
+    const hexlists = document.querySelectorAll<HTMLLIElement>(
+      "#hexlists .post-list"
+    );
+    const previews = document.querySelectorAll<HTMLDivElement>("#previews div");
+
+    if (!container) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const containerHeight = containerRect.height; // 获取元素的位置信息
+    hexlists.forEach((el, idx) => {
+      const childRect = el.getBoundingClientRect();
+      if (selectedId == el.dataset["id"]) {
+        el.style.marginLeft = "unset";
+        return;
+      }
+
+      const relativeY = childRect.top - containerRect.top;
+      const delta = Math.min(relativeY, containerRect.height - relativeY);
+      const calcML = (dy) => (dy < 0 ? -dy * 0.2 : dy * 0.8);
+
+      el.style.marginLeft = `${calcML(relativeY - containerRect.height * 0.7)}px`;
+    });
+    document.addEventListener('astro:after-swap', setOffset);
+  }
+</script>
+
+<Layout title="blog">
+  <div class="flex h-[100vh]">
+    <div class="flex w-1/2 h-full">
+      <div id="previews" class="w-full h-full p-12">
+        <div data-id={entry.id} >
+          <PreviewPost entry={entry} />
+        </div>
+      </div>
+    </div>
+    <div>
+      <PostList {allPosts} current={entry} transition:persist />
+    </div>
+  </div>
+</Layout>
