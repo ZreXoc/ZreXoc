@@ -11,9 +11,16 @@
     font-style: normal; 
     font-display: swap;
   }
+  @font-face {
+    font-family: "HYAlzheimer";
+    src: url(/fonts/HYAlzheimer.ttf) format("truetype");
+    font-weight: normal;
+    font-style: normal; 
+    font-display: swap;
+  }
 }
 @layer components {
   .a {
-    @apply hover:text-fuchsia-400 hover:cursor-pointer
+    @apply hover:text-fuchsia-400 hover:cursor-pointer group-hover:text-fuchsia-400 group-hover:cursor-pointer
     }
   }

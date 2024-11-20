@@ -6,6 +6,8 @@ import Layout from "@/layouts/Layout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 import { toIcon } from "@/utils/icon";
 import { Icon } from "astro-icon/components";
+import FormattedDate from "@/components/common/FormattedDate.astro";
+import TOC from "@/components/common/TOC.astro";
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
   const blogEntries: CollectionEntry<"blog">[] = await getCollection("blog");
@@ -20,17 +22,15 @@ const data = entry.data;
 const { Content, remarkPluginFrontmatter } = await entry.render();
 const { minutesRead } = remarkPluginFrontmatter;
 
-const lastModified = dayjs(remarkPluginFrontmatter.lastModified)
-  .utc()
-  .format("HH:mm:ss DD MMMM YYYY UTC");
+const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
 ---
 
 <Layout title={entry.data.title}>
-  <div class="w-full">
-    <div class="mx-auto mt-4 prose lg:prose-xl">
+  <main class="w-full">
+    <div class="mx-auto prose lg:prose-xl">
       <h1>{data.title}</h1>
-      <p class="flex flex-row divide-x-2 divide-solid divide-slate-200">
-        <span class="inline-flex pr-2 gap-2">
+      <p class="flex flex-row divide-x-2 divide-solid divide-slate-200 *:px-2">
+        <span class="inline-flex gap-2">
           {
             data.tags
               .map((t) => toIcon(t))
@@ -38,10 +38,14 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified)
               .map((t) => <Icon class="h-auto" name={t} />)
           }
         </span>
-        {[lastModified, minutesRead].map((t) => <span class="px-2">{t}</span>)}
+        <span>
+          <FormattedDate date={lastModified} />
+        </span>
+        <span>{minutesRead}</span>
       </p>
       <hr />
+      <!--<TOC {headings}/>-->
       <Content />
     </div>
-  </div>
+  </main>
 </Layout>

@@ -1,4 +1,5 @@
 ---
+import ConnectionLine from "@/components/ConnectionLine.astro";
 import SquareLink from "../components/Link/SquareLink.astro";
 import Layout from "../layouts/Layout.astro";
 
@@ -7,49 +8,49 @@ const sections: Array<{
   title: string;
 }> = [
   {
-    href: "blog",
-    title: "Blog",
-  },
-  {
-    href: "blog",
-    title: "Blog",
-  },
-  {
-    href: "blog",
-    title: "Blog",
-  },
-  {
-    href: "blog",
-    title: "Blog",
-  },
-  {
     href: "Projects",
     title: "Projects",
   },
+  {
+    href: "blog",
+    title: "Blog",
+  },
+
+  {
+    href: "about",
+    title: "About",
+  },
 ];
+
+const connections = [];
+for (let i = 0; i < sections.length - 1; i++) {
+  connections.push({ from: sections[i].title, to: sections[i + 1].title });
+}
 ---
 
-<Layout title="Welcome to Astro.">
-  <main class="w-full mx-0 mt-12">
-    <h1 class="text-center text-4xl font-[kingsgmb]">asdf</h1>
-    asfd
-    <font face="kingsgmb">asdfasdf</font>
+<Layout
+  title="Welcome to Astro."
+  className="h-[100vh] py-[25%] px-12 flex flex-col justify-evenly items-center gap-4"
+  withHeader={false}
+>
+  <main class="mx-0 w-full max-w-[1200px] h-[100vh]">
+    <h1 class="text-center text-4xl font-kingsgmb my-4 lg:text-6xl">XiC's Blog</h1>
+    <h1 class="text-center text-4xl font-HYAlzheimer my-8 lg:text-6xl">熙晨的博客</h1>
+    <div class="w-full flex justify-evenly items-center font-kingsgmb">
+      {
+        sections.map(({ href, title }, i, arr) => (
+          <SquareLink
+            {href}
+            {title}
+            class="SquareLink transition-all hover:translate-y-[20%] hover:drop-shadow-md"
+            size={i === Math.floor((arr.length - 1) / 2) ? 24 : 20}
+            attrs={{
+              "data-clnode": title,
+            }}
+          />
+        ))
+      }
+    </div>
   </main>
-  <div class="w-full flex justify-evenly items-center">
-    {
-      sections.map(({ href, title }, i, arr) => (
-        <SquareLink
-          {href}
-          {title}
-          size={i === Math.floor((arr.length - 1) / 2) ? 24 : 20}
-        />
-      ))
-    }
-  </div>
 </Layout>
-
-<style>
-h1 {
-  font-family: kingsgmb, sans-serif;
-}
-</style>
+<ConnectionLine {connections} />

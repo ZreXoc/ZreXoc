@@ -1,11 +1,15 @@
 ---
+import { Breadcrumbs } from "astro-breadcrumbs";
 import { ViewTransitions } from "astro:transitions";
 import "../style.css";
+import "astro-breadcrumbs/breadcrumbs.css";
 interface Props {
   title: string;
+  className?: string;
+  withHeader?: boolean
 }
 
-const { title } = Astro.props;
+const { title, className,withHeader=true } = Astro.props;
 ---
 
 <!doctype html>
@@ -19,12 +23,70 @@ const { title } = Astro.props;
     <title>{title}</title>
     <ViewTransitions />
   </head>
-  <body class="bg-slate-100">
+  <body class={`bg-slate-100 ${className}`}>
+    {withHeader?
+    <header class="flex flex-row sticky top-0 h-6 bg-slate-400 z-10">
+      <!-- TODO: PR for breadcrumbs: excludeCurrentPage with trailing slash-->
+      <Breadcrumbs>
+        <svg
+          slot="index"
+          aria-label="Home Page"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z">
+          </path><polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span slot="separator" class="nav-sep h-full w-4 text-right" style={{}}
+          >/</span
+        >
+      </Breadcrumbs>
+      <h2 class="bg-slate-200 px-4 -translate-x-4 -z-[1] clip-rt2lb">
+        {title}
+      </h2>
+    </header>:null}
     <slot />
   </body>
 </html>
 
+<style>
+  .nav-sep {
+    clip-path: polygon(
+      0 0,
+      100% 0%,
+      0.05em 100%,
+      0% 100%
+    ); /* TODO: extruct slash separator component */
+    background-color: theme("colors.slate.300");
+  }
+</style>
+
 <style is:global>
+  .c-breadcrumbs__separator {
+    filter: drop-shadow(0.05em 0 0 black);
+  }
+  astro-breadcrumbs {
+    display: flex;
+    height: 100%;
+  }
+
+  astro-breadcrumbs ol.c-breadcrumbs__crumbs {
+    width: fit-content;
+    height: 100%;
+    background-color: theme("colors.slate.300");
+    padding: 0 1em 0 0.5em;
+    clip-path: polygon(0 0, 100% 0%, calc(100% - 1em) 100%, 0% 100%);
+  }
+
+  .clip-rt2lb {
+    clip-path: polygon(0 0, 100% 0%, calc(100% - 1em) 100%, 0% 100%);
+  }
   @keyframes side-right {
     0% {
       opacity: 0;

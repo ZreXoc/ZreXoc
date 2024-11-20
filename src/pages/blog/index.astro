@@ -82,7 +82,7 @@ let allPosts = await getCollection("blog");
       const calcML = (dy: number) => (dy < 0 ? -dy * 0.2 : dy * 0.8);
 
       // el.style.marginLeft = `${calcML(relativeY - containerRect.height * 0.7)}px`;
-      el.style.transform = `translateX(${calcML(relativeY - containerRect.height * 0.7)}px)`;
+      el.style.transform = `translateX(${calcML(relativeY - containerRect.height * 0.3)}px)`;
     });
   }
 

@@ -5,6 +5,7 @@ import { Icon } from "astro-icon/components";
 import { toIcon } from "@/utils/icon";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import FormattedDate from "../common/FormattedDate.astro";
 dayjs.extend(utc);
 
 export interface Props {
@@ -50,20 +51,24 @@ const customTransition = {
 </style>
 <ul
   id="hexlists"
-  class="h-full pl-12 flex flex-col gap-8 overflow-y-auto transition-[margin-left]"
+  class="h-full pl-12 flex flex-col gap-6 overflow-y-auto transition-[margin-left]"
   transition:animate={customTransition}
   transition:persist
   transition:name="post-list"
   data-selected={current?.id}
 >
   {
-  allPosts.map(async (entry) => {
-  const { id, slug, data: { title, tags, summary } } = entry;
-  const { remarkPluginFrontmatter } = await entry.render();
+    allPosts.map(async (entry) => {
+      const {
+        id,
+        slug,
+        data: { title, tags, summary },
+      } = entry;
+      const { remarkPluginFrontmatter } = await entry.render();
 
-  const lastModified = dayjs(remarkPluginFrontmatter.lastModified)
-  .utc()
-  .format("HH:mm:ss DD MMMM YYYY UTC");
+      const lastModified = dayjs(remarkPluginFrontmatter.lastModified)
+        .utc()
+        .toDate()
       return (
         <li
           class="w-[100vw] post-list cursor-pointer"
@@ -72,37 +77,23 @@ const customTransition = {
         >
           <a href={`/blog/${slug}`} data-astro-prefetch>
             <Hex>
-              <div slot="content" class="flex flex-row relative prose prose-h2:mb-2 prose-h2:mt-0">
+              <div
+                slot="content"
+                class="flex flex-row relative prose prose-h2:mb-2 prose-h2:mt-0"
+              >
                 <div class="w-fit min-w-64">
                   <h2 class="text-3xl pl-2">{title}</h2>
                   <p>{summary}</p>
                 </div>
                 <div class="flex gap-2 -z-10">
-                {
-                tags.map((t)=>
-                  <Icon
-                    class="w-24 h-24 icon"
-                    name={toIcon(t)}
-                  />
-                )
-                }
+                  {tags.map((t) => (
+                    <Icon class="w-24 h-24 icon" name={toIcon(t)} />
+                  ))}
                 </div>
               </div>
               <div slot="footer">
                 <p>
-                {lastModified}
-                  <span class="inline-flex">
-                    <!--
-                       -{tags
-                       -  .map((t) => toIcon(t))
-                       -  .slice(0, 2)
-                       -  .map((t) => (
-                       -    <Icon class="h-auto" name={t} />
-                       -  ))}
-                       -->
-                       <!--{tags.map(t=><span class="pr-2">{t}</span>)}-->
-                       
-                  </span>
+                  <FormattedDate date={lastModified} />
                 </p>
               </div>
             </Hex>

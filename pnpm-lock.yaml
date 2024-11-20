@@ -35,6 +35,9 @@ importers:
       astro:
         specifier: ^4.16.7
         version: 4.16.7(@types/node@22.9.0)(rollup@4.24.2)(typescript@5.6.3)
+      astro-breadcrumbs:
+        specifier: ^3.2.0
+        version: 3.2.0(astro@4.16.7(@types/node@22.9.0)(rollup@4.24.2)(typescript@5.6.3))
       astro-icon:
         specifier: ^1.1.2
         version: 1.1.2
@@ -1016,6 +1019,11 @@ packages:
   astring@1.9.0:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
+
+  astro-breadcrumbs@3.2.0:
+    resolution: {integrity: sha512-TrXitr0GQjJsW/MAlvRPSWOjilpj7lY4Px1QEfDHPT0nGoBk+mNBiJARx0h8GvpuK7h0hAG6dYa+fFpoW5bbcw==}
+    peerDependencies:
+      astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
 
   astro-icon@1.1.2:
     resolution: {integrity: sha512-2qAHBtZLYuFEIMP0Ck0edyLi5fQmJjwP2Qbv41f8L4KAJ2sra/dH7q5lCOn4q0DHVtS0w3tPG8UKQRits3UPcg==}
@@ -4066,6 +4074,10 @@ snapshots:
   array-iterate@2.0.1: {}
 
   astring@1.9.0: {}
+
+  astro-breadcrumbs@3.2.0(astro@4.16.7(@types/node@22.9.0)(rollup@4.24.2)(typescript@5.6.3)):
+    dependencies:
+      astro: 4.16.7(@types/node@22.9.0)(rollup@4.24.2)(typescript@5.6.3)
 
   astro-icon@1.1.2:
     dependencies:

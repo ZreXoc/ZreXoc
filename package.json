@@ -19,6 +19,7 @@
     "@iconify/tailwind": "^1.1.3",
     "@tailwindcss/typography": "^0.5.15",
     "astro": "^4.16.7",
+    "astro-breadcrumbs": "^3.2.0",
     "astro-icon": "^1.1.2",
     "dayjs": "^1.11.13",
     "mdast-util-to-string": "^4.0.0",

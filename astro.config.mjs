@@ -17,7 +17,7 @@ export default defineConfig({
   },
   markdown: {
     syntaxHighlight: 'prism',
-    remarkPlugins: [[remarkToc, {maxDepth:2}],remarkReadingTime,remarkModifiedTime]
+    remarkPlugins: [[remarkToc, {heading:'目录', maxDepth:3}],remarkReadingTime,remarkModifiedTime]
   },
   integrations: [vue(), tailwind(), mdx(), icon({
     iconDir: "src/assets/icons"

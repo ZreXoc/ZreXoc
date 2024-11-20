@@ -6,7 +6,8 @@ export default {
 	theme: {
     extend: {
        fontFamily: {
-         kingsgmb: ['kingsgmb']
+         kingsgmb: ['kingsgmb'],
+         HYAlzheimer: ['HYAlzheimer']
       },
     },
 	},

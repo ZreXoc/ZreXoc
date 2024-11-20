@@ -1,0 +1,106 @@
+---
+type Connect = { from: string; to: string } & astroHTML.JSX.SVGAttributes;
+
+export interface Props {
+  globalAttr?: astroHTML.JSX.SVGAttributes;
+  connections: Connect[]; // data-cnode="foo"
+}
+
+let { globalAttr, connections } = Astro.props;
+
+globalAttr = {
+  stroke: "#d4d4d8",
+  "stroke-width": 2,
+  fill: "none",
+  //"stroke-dasharray" : "1% 10%",
+  "stroke-linecap": "round",
+  ...globalAttr,
+};
+---
+
+<svg id="cl-bg" class="fixed w-full h-full inset-0 -z-10">
+  <defs>
+    <marker
+      id="cl-circle"
+      markerUnits="strokeWidth"
+      markerWidth="6"
+      markerHeight="6"
+      refX="-2"
+      refY="2"
+      orient="auto-start-reverse"
+    >
+      <!--<circle cx="3" cy="3" r="1" stroke="none" fill="context-stroke"></circle>-->
+      <g transform="scale(0.25 0.25)" fill="context-stroke">
+        <!-- diamond from https://icons.getbootstrap.com/icons/diamond/ -->
+        <path
+          fill-rule="evenodd"
+          d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.48 1.48 0 0 1 0-2.098z"
+        ></path>
+      </g>
+    </marker>
+  </defs>
+
+  {
+    connections.map(({ from, to, ...attr }) => {
+      return (
+        <path
+          class="cl-line"
+          style="marker-start: url(#cl-circle);marker-end: url(#cl-circle);"
+          {...globalAttr}
+          {...attr}
+          data-from={from}
+          data-to={to}
+        />
+      );
+    })
+  }
+</svg>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const pathEls: NodeListOf<SVGPathElement> =
+      document.querySelectorAll("#cl-bg .cl-line");
+    if (!pathEls) {
+      console.error(`svg ${pathEls} not found`);
+      return;
+    }
+    pathEls.forEach((pathEl: SVGPathElement) => {
+      const { from, to } = pathEl.dataset;
+      if (!from || !to) return;
+      const fromEl = document.querySelector(`[data-clnode=${from}]`);
+      const toEl = document.querySelector(`[data-clnode=${to}]`);
+      if (!fromEl || !toEl) {
+        console.error(`[data-clnode=${from}] or [data-clnode=${to}] not found`);
+        return;
+      }
+
+      setInterval(() => {
+        const {
+          start: { x: x1, y: y1 },
+          end: { x: x2, y: y2 },
+        } = getPos(fromEl, toEl);
+
+        const xm = (x1 + x2) / 2,
+          ym = (y1 + y2) / 2;
+
+        pathEl.setAttribute(
+          "d",
+          `M ${x1} ${y1} Q ${(xm + x1) / 2} ${y1} ${xm} ${ym} T ${x2} ${y2}`
+        );
+      }, 1);
+    });
+  });
+
+  function getPos(el1: Element, el2: Element) {
+    const rect1 = el1.getBoundingClientRect(),
+      rect2 = el2.getBoundingClientRect();
+    const x1 = rect1.right + parseFloat(getComputedStyle(el1).marginRight) + 15,
+      y1 = (rect1.top + rect1.bottom) / 2;
+    const x2 = rect2.left - parseFloat(getComputedStyle(el2).marginLeft) - 15,
+      y2 = (rect2.top + rect2.bottom) / 2;
+    return {
+      start: { x: x1, y: y1 },
+      end: { x: x2, y: y2 },
+    };
+  }
+</script>

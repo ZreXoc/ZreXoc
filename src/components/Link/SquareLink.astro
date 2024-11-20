@@ -1,16 +1,33 @@
 ---
-import '@/style.css'
+import "@/style.css";
 interface Props {
   title: string;
   href: string;
-  size?: number
+  size?: number;
+  class?: string;
+  hoverClass?: string;
+  attrs?: astroHTML.JSX.AnchorHTMLAttributes
 }
 
-const { href, title, size = 24 } = Astro.props;
-
+const { href, title, size = 24, class: className, hoverClass, attrs } = Astro.props;
 ---
 
-<a href={href} class="relative m-5 group" style={{width: `${size/4}em`,height: `${size/4}em`, margin: `${size/4*(1/1.4-1/2)}em`}}>
-  <span class={`a absolute inset-0 z-10 flex items-center justify-center text-center align-middle transform group-hover:text-red`}>{title}</span>
-  <div class="absolute inset-0 rotate-45 border-spacing-y-40 border-4 border-zinc-300"/>
+<a
+  href={href}
+  class={`a relative flex align-middle items-center justify-center flex-col m-5 ${className}`}
+  style={{
+    width: `${size / 4}em`,
+    height: `${size / 4}em`,
+    margin: `${(size / 4) * (1 / 1.4 - 1 / 2)}em`,
+  }}
+  {...attrs}
+>
+  <span
+    class={`z-10 flex self-center items-center justify-center text-center align-middle text-xl transform group-hover:text-red`}
+    >{title}</span
+  >
+  <div
+    class={`absolute inset-0 rotate-45 group/sl border-spacing-y-40 border-4 border-zinc-300 ${hoverClass}`}
+  >
+  </div>
 </a>
