@@ -7,8 +7,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { toIcon } from "@/utils/icon";
 import { Icon } from "astro-icon/components";
 import FormattedDate from "@/components/common/FormattedDate.astro";
-import TOC from "@/components/common/TOC.astro";
-// 1. Generate a new path for every collection entry
+
 export async function getStaticPaths() {
   const blogEntries: CollectionEntry<"blog">[] = await getCollection("blog");
   return blogEntries.map((entry) => ({
@@ -16,7 +15,6 @@ export async function getStaticPaths() {
     props: { entry },
   }));
 }
-// 2. For your template, you can get the entry directly from the prop
 const { entry } = Astro.props;
 const data = entry.data;
 const { Content, remarkPluginFrontmatter } = await entry.render();

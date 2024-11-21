@@ -7,7 +7,8 @@ export default {
     extend: {
        fontFamily: {
          kingsgmb: ['kingsgmb'],
-         HYAlzheimer: ['HYAlzheimer']
+         HYAlzheimer: ['HYAlzheimer'],
+         broken: ['kingsgmb', 'HYAlzheimer']
       },
     },
 	},

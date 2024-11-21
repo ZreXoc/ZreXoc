@@ -86,7 +86,8 @@ let allPosts = await getCollection("blog");
     });
   }
 
-  function switchSelected(id: string) {
+  function switchSelected(id?: string) {
+    if(!id) return;
     if (id == selectedId) {
       //location.assign(`?post=${id}`)
       return;
