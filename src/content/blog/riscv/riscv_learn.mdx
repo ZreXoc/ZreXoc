@@ -1,0 +1,118 @@
+---
+title: Riscv 学习笔记
+category: technique
+tags:
+    - Riscv
+summary: 关于Riscv的个人学习笔记
+description: 关于Riscv的个人学习笔记,仅做参考。
+preview: ./riscv.svg
+
+---
+
+
+## 目录
+## 常用指令
+> [!quote] 要评判一个指令集架构，不仅要看它包括了什么，**而且要看它省略了什么**。
+
+
+### 算术运算
+
+
+ |  指令  |         格式        |   功能   | 
+ |    -   |          :-         |    :-    |
+ |  `add` |  `add rd, rs1, rs2` | `rd = rs1 + rs2` |
+ | `addi` | `addi rd, rs1, imm` | `rd = rs1 + imm` |
+ |  `sub` |  `sub rd, rs1, rs2` | `rd = rs1 - rs2` |
+
+ `add`和`addi`的区别就是`add`用于将*两个寄存器*相加后存入另一个寄存器，`addi`用于将一个寄存器*加上立即数*后存入。
+
+> [!note] 立即数
+> 与操作码一起放在指令代码段中的数值。直观来说就是直接写在指令后边的数。
+
+
+> [!question]- 为何没有`subi`指令？
+    可以用`sub rd, rs1, -imm`来实现。
+
+### 分支控制
+
+- `beq`: `beq rs1, rs2, L1`
+- `bne`: `bne rs1, rs2, L1`
+- `blt`: `blt rs1, rs2, L1`
+- `bge`: `bge rs1, rs2, L1`
+
+> [!tip] Riscv的else语句通常放在if语句之前。
+>
+> 使用if-else语句时，判断条件是`==`，就要用`bne`；条件是`!=`，就要用`beq`：
+> ```asm
+> IF: bne rs1, rs2, Else # --> Else: rs1!=rs2
+>     # ↓ If: rs1==rs2
+>     ...
+>     j Then
+> 
+> 
+> Else: 
+>     # code for else statement
+>     ...
+>     j Then
+> 
+> Then: 
+>     # code for then statement
+>     ...
+> ```
+
+### 逻辑运算
+
+  | 指令  | 格式                 | 功能     |
+  | -     | :-                   | :-       |
+  | `and` | `and rd, rs1, rs2`   | 逻辑与   |
+  | `or`  | `or rd, rs1, rs2`    | 逻辑或   |
+  | `xor` | `xor rd, rs1, rs2`   | 逻辑异或 |
+  | `sll` | `sll rd, rs1, shamt` | 逻辑左移 |
+  | `srl` | `srl rd, rs1, shamt` | 逻辑右移 |
+  | `sra` | `sra rd, rs1, shamt` | 算术右移 |
+
+`srl`相较于`sra`，`srl`右移后左侧补零，而`sra`会扩展符号位。
+
+> [!question]- 为什么没有`not`指令？
+> 可以用`xor rd, rs1, -1`来实现。
+
+### 伪指令
+
+这些指令并不是可执行的指令，没有相应机器码，在编译时会被替换成其他指令。
+
+以下几个伪指令就相当于是一些指令的简写，编译时会被替换为相应指令。
+| 指令  | 格式         | 对应指令           | 功能           |
+  | -     | :-           | :-                 | :-             |
+  | `mv`  | `mv rd, rs`  | `addi rs, rs, 0`   | 移动寄存器的值 |
+  | `li`  | `li rd, imm` | `addi rd, x0, imm` | 加载立即数     |
+  | `nop` | `nop`        | `addi x0, x0, 0`   | 空操作         |
+
+### 函数调用
+
+  函数调用的六个步骤：
+  + 设置参数(`a0`到`a7`)
+  + 跳转(`jal`)
+  
+  | 指令  | 格式                 | 功能     | 对应指令 |
+  | -     | :-                   | :-       | :-       |
+  | `j` | `j label`      | 跳转 | `jal x0, label` |
+  | `jr`  | `jr rs1`             | 跳转到寄存器       | |
+  | `jal` | `jal rd, label`      | 跳转并链接 | |
+  | `jalr`| `jalr rd, rs1, offset`| 跳转并链接(带偏移) | |
+  | `ret` | `ret`                | 返回       | `jr ra` |
+{/*  | `call`| `call rd, label`     | 调用       | |*/}
+
+
+  `jal` 相当于`addi ra, zero, imm; j label`，省去每次都手动设置返回地址的麻烦。
+  但实际上j才是伪指令，这里只是说作用上的的等价。
+
+> [!tip]
+> ```asm
+> 1008 addi ra, zero, 1016
+> 1012 sum
+> ```
+> 
+> 等价于：
+> ```asm
+> 1008 jal sum
+> ```
