@@ -26,8 +26,7 @@ const { title, className,withHeader=true } = Astro.props;
   <body class={`bg-slate-100 ${className}`}>
     {withHeader?
     <header class="flex flex-row sticky top-0 h-6 bg-slate-400 z-10">
-      <!-- TODO: PR for breadcrumbs: excludeCurrentPage with trailing slash-->
-      <Breadcrumbs>
+      <Breadcrumbs excludeCurrentPage={true}>
         <svg
           slot="index"
           aria-label="Home Page"
