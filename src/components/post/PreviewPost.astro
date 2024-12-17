@@ -66,12 +66,10 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
   <div
     class="image w-full max-w-96 lg:max-w-[28rem] mb-12 aspect-square bg-slate-600 text-white rotate-[4deg] drop-shadow-[24px_24px_0px] shadow-lg"
   >
-    <!--image placeholder-->
-    <!--<Preview client:load/>-->
     {
       entry.data.preview ? (
-        <Image src={entry.data.preview} alt={entry.data.title} />
-      ) : null
+        <Image class="w-full h-full object-cover" src={entry.data.preview} alt={entry.data.title} />
+        ) : <!--image placeholder-->
     }
   </div>
   <div class="prose">

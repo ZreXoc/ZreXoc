@@ -4,8 +4,12 @@ interface Props {
 }
 
 const { date } = Astro.props;
+const isDate = !isNaN(date.getTime())
+console.log(date,isDate)
 ---
 
+{
+isDate? (
 <time datetime={date.toISOString()}>
   {
     date.toLocaleDateString("zh-cn", {
@@ -15,3 +19,7 @@ const { date } = Astro.props;
     })
   }
 </time>
+):<!--
+invalide date {date}
+-->
+}

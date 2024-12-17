@@ -86,7 +86,7 @@ const customTransition = {
                   <p>{summary}</p>
                 </div>
                 <div class="flex gap-2 -z-10">
-                  {tags.map((t) => (
+                  {tags.slice(0,1).map((t) => (
                     <Icon class="w-24 h-24 icon" name={toIcon(t)} />
                   ))}
                 </div>

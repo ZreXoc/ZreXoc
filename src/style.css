@@ -4,6 +4,10 @@
 
 
 @layer base {
+  :root .prose .callout{
+    /*--callout-color-light: theme('colors.rose.400') !important;*/
+    /*--callout-color-dark: theme('colors.cyan.500') !important;*/
+  }
   @font-face {
     font-family: "kingsgmb";
     src: url(/fonts/kingsgmb.ttf) format("truetype");
@@ -31,3 +35,4 @@
   }
 
   }
+

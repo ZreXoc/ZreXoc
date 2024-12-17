@@ -1,4 +1,5 @@
 ---
+import "rehype-callouts/theme/obsidian";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
@@ -23,16 +24,96 @@ const { minutesRead } = remarkPluginFrontmatter;
 const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
 ---
 
+<style is:global>
+  .jargon-term {
+    text-decoration: underline dotted #228be6;
+  }
+  .jargon-term::after {
+    content: "?";
+    font-weight: bold;
+    display: inline-block;
+    transform: translate(0, -0.5em);
+    font-size: 75%;
+    color: #228be6;
+    margin-left: 3px;
+  }
+  .jargon-term:hover {
+    position: relative;
+    text-decoration: none;
+    cursor: help;
+  }
+  .jargon-term .jargon-info {
+    display: none;
+  }
+  .jargon-term:hover .jargon-info {
+    display: block;
+    position: absolute;
+    top: 1.5em;
+    left: 0;
+    background: #f3f4f6;
+    box-shadow:
+      0 1px 3px 0 rgb(0 0 0 / 0.1),
+      0 1px 2px -1px rgb(0 0 0 / 0.1);
+    border: 1px solid #dcdcdc;
+    padding: 1rem;
+    border-radius: 4px;
+    border-radius: 12px;
+    font-size: 90%;
+    min-width: 250px;
+    max-width: 450px;
+    z-index: 1;
+  }
+  h1 {
+    counter-reset: h2counter;
+  }
+  h2 {
+    counter-reset: h3counter;
+  }
+  h3 {
+    counter-reset: h4counter;
+  }
+  h4 {
+    counter-reset: h5counter;
+  }
+  h5 {
+    counter-reset: h6counter;
+  }
+  h6 {
+  }
+  h2:not(#目录):before {
+    counter-increment: h2counter;
+    content: counter(h2counter) ".\0000a0\0000a0";
+  }
+  h3:before {
+    counter-increment: h3counter;
+    content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
+  }
+  h4:before {
+    counter-increment: h4counter;
+    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter)
+      ".\0000a0\0000a0";
+  }
+  h5:before {
+    counter-increment: h5counter;
+    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter)
+      "." counter(h5counter) ".\0000a0\0000a0";
+  }
+  h6:before {
+    counter-increment: h6counter;
+    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter)
+      "." counter(h5counter) "." counter(h6counter) ".\0000a0\0000a0";
+  }
+</style>
 <Layout title={entry.data.title}>
   <main class="w-full">
-    <div class="mx-auto prose lg:prose-xl">
+    <div class="mx-auto prose lg:prose-xl prose-code:font-code my-2">
       <h1>{data.title}</h1>
       <p class="flex flex-row divide-x-2 divide-solid divide-slate-200 *:px-2">
         <span class="inline-flex gap-2">
           {
             data.tags
+              .slice(0, 1)
               .map((t) => toIcon(t))
-              .slice(0, 2)
               .map((t) => <Icon class="h-auto" name={t} />)
           }
         </span>
@@ -42,8 +123,8 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
         <span>{minutesRead}</span>
       </p>
       <hr />
-      <!--<TOC {headings}/>-->
       <Content />
+      <hr />
     </div>
   </main>
 </Layout>
