@@ -7,8 +7,9 @@ import PostList from "@/components/post/PostList.astro";
 
 import { getEntry, getEntries, getCollection } from "astro:content";
 
-const blogPost = await getEntry("blog", "post-1");
-let allPosts = await getCollection("blog");
+let allPosts = await getCollection("blog", ({data})=>{
+return !data.draft
+});
 
 // console.log(allPosts);
 // allPosts = [...allPosts, ...allPosts];

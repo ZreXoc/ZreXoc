@@ -103,10 +103,25 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
     content: counter(h2counter) "." counter(h3counter) "." counter(h4counter)
       "." counter(h5counter) "." counter(h6counter) ".\0000a0\0000a0";
   }
+  .prose p > svg,
+  .prose li > svg,
+  .prose blockquote > svg,
+  .prose h1 > svg,
+  .prose h2 > svg,
+  .prose h3 > svg,
+  .prose h4 > svg,
+  .prose h5 > svg,
+  .prose h6 > svg,
+  .prose th > svg,
+  .prose td > svg,
+  .prose pre > svg,
+  .prose code > svg {
+    display: inline-block;
+  }
 </style>
 <Layout title={entry.data.title}>
   <main class="w-full">
-    <div class="mx-auto prose lg:prose-xl prose-code:font-code my-2">
+    <div class="mx-auto prose lg:prose-xl prose-code:font-code">
       <h1>{data.title}</h1>
       <p class="flex flex-row divide-x-2 divide-solid divide-slate-200 *:px-2">
         <span class="inline-flex gap-2">
