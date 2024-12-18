@@ -4,24 +4,27 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 import Layout from "@/layouts/Layout.astro";
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, type CollectionEntry, render} from "astro:content";
 import { toIcon } from "@/utils/icon";
 import { Icon } from "astro-icon/components";
 import FormattedDate from "@/components/common/FormattedDate.astro";
 
 export async function getStaticPaths() {
   const blogEntries: CollectionEntry<"blog">[] = await getCollection("blog");
+
   return blogEntries.map((entry) => ({
-    params: { slug: entry.slug },
+    params: { slug: entry.id },
     props: { entry },
   }));
 }
 const { entry } = Astro.props;
 const data = entry.data;
-const { Content, remarkPluginFrontmatter } = await entry.render();
+const { Content, remarkPluginFrontmatter } = await render(entry);
 const { minutesRead } = remarkPluginFrontmatter;
+console.log(minutesRead)
 
 const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
+
 ---
 
 <style is:global>
@@ -63,42 +66,42 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
     max-width: 450px;
     z-index: 1;
   }
-  h1 {
+  .prose h1 {
     counter-reset: h2counter;
   }
-  h2 {
+  .prose h2 {
     counter-reset: h3counter;
   }
-  h3 {
+  .prose h3 {
     counter-reset: h4counter;
   }
-  h4 {
+  .prose h4 {
     counter-reset: h5counter;
   }
-  h5 {
+  .prose h5 {
     counter-reset: h6counter;
   }
-  h6 {
+  .prose h6 {
   }
-  h2:not(#目录):before {
+  .prose h2:not(#目录):before {
     counter-increment: h2counter;
     content: counter(h2counter) ".\0000a0\0000a0";
   }
-  h3:before {
+  .prose h3:before {
     counter-increment: h3counter;
     content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
   }
-  h4:before {
+  .prose h4:before {
     counter-increment: h4counter;
     content: counter(h2counter) "." counter(h3counter) "." counter(h4counter)
       ".\0000a0\0000a0";
   }
-  h5:before {
+  .prose h5:before {
     counter-increment: h5counter;
     content: counter(h2counter) "." counter(h3counter) "." counter(h4counter)
       "." counter(h5counter) ".\0000a0\0000a0";
   }
-  h6:before {
+  .prose h6:before {
     counter-increment: h6counter;
     content: counter(h2counter) "." counter(h3counter) "." counter(h4counter)
       "." counter(h5counter) "." counter(h6counter) ".\0000a0\0000a0";
@@ -121,9 +124,9 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
 </style>
 <Layout title={entry.data.title}>
   <main class="w-full">
-    <div class="mx-auto prose lg:prose-xl prose-code:font-code">
+    <div class="mx-auto my-4 prose lg:prose-xl prose-code:font-code">
       <h1>{data.title}</h1>
-      <p class="flex flex-row divide-x-2 divide-solid divide-slate-200 *:px-2">
+      <p class="flex flex-row divide-x-2 divide-solid divide-slate-200 *:px-2 mb-0">
         <span class="inline-flex gap-2">
           {
             data.tags
@@ -135,7 +138,8 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
         <span>
           <FormattedDate date={lastModified} />
         </span>
-        <span>{minutesRead}</span>
+        <span>{minutesRead.words}字</span>
+        <span>{minutesRead.text}</span>
       </p>
       <hr />
       <Content />

@@ -1,4 +1,4 @@
-import defaultTheme from 'tailwindcss/defaultTheme'
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -9,16 +9,27 @@ export default {
         kingsgmb: ['kingsgmb'],
         HYAlzheimer: ['HYAlzheimer'],
         broken: ['kingsgmb', 'HYAlzheimer'],
-        code: ['Cascadia Code', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', 'Courier New', 'monospace']
+        code: [
+          'Cascadia Code',
+          'ui-monospace',
+          'SFMono-Regular',
+          'Menlo',
+          'Monaco',
+          'Consolas',
+          '"Liberation Mono"',
+          'Courier New',
+          'monospace',
+        ],
       },
       typography: (theme) => ({
         DEFAULT: {
           css: {
             code: {
-              "font-family": 'Cascadia Code, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
+              'font-family':
+                'Cascadia Code, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
 
               //color:theme('colors.slate.200')
-            }
+            },
 
             // ...
           },
@@ -26,7 +37,5 @@ export default {
       }),
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-  ],
-}
+  plugins: [require('@tailwindcss/typography')],
+};

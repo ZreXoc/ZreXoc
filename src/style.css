@@ -2,37 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
-  :root .prose .callout{
+  :root .prose .callout {
     /*--callout-color-light: theme('colors.rose.400') !important;*/
     /*--callout-color-dark: theme('colors.cyan.500') !important;*/
   }
   @font-face {
-    font-family: "kingsgmb";
-    src: url(/fonts/kingsgmb.ttf) format("truetype");
+    font-family: 'kingsgmb';
+    src: url(/fonts/kingsgmb.ttf) format('truetype');
     font-weight: normal;
-    font-style: normal; 
+    font-style: normal;
     font-display: swap;
   }
   @font-face {
-    font-family: "HYAlzheimer";
-    src: url(/fonts/HYAlzheimer.ttf) format("truetype");
+    font-family: 'HYAlzheimer';
+    src: url(/fonts/HYAlzheimer.ttf) format('truetype');
     font-weight: normal;
-    font-style: normal; 
+    font-style: normal;
     font-display: swap;
   }
 }
 @layer components {
   .a {
-    @apply hover:text-fuchsia-400 hover:cursor-pointer group-hover:text-fuchsia-400 group-hover:cursor-pointer
-    }
+    @apply hover:text-fuchsia-400 hover:cursor-pointer group-hover:text-fuchsia-400 group-hover:cursor-pointer;
+  }
   .hex-wrap {
     filter: drop-shadow(20px 8px 0px theme('colors.gray.300'));
   }
   .hex-clip {
     clip-path: polygon(25px 0%, 100% 0, 100% 100%, 15px 100%, 0 75%);
   }
-
-  }
-
+}

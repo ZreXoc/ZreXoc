@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import type { CollectionEntry } from "astro:content";
+import { render, type CollectionEntry } from "astro:content";
 import { Icon } from "astro-icon/components";
 
 import { toIcon } from "@utils/icon";
@@ -15,7 +15,7 @@ interface Props {
 
 const { entry } = Astro.props;
 const data = entry.data;
-const { remarkPluginFrontmatter } = await entry.render();
+const { remarkPluginFrontmatter } = await render(entry);
 const { minutesRead } = remarkPluginFrontmatter;
 
 const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();

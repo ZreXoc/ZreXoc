@@ -1,5 +1,5 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import { render, type CollectionEntry } from "astro:content";
 import Hex from "../Hex.astro";
 import { Icon } from "astro-icon/components";
 import { toIcon } from "@/utils/icon";
@@ -25,8 +25,7 @@ const anim = {
     name: "side-right",
     duration: "0.5s",
     easing: "ease-in-out",
-  },
-};
+  }, };
 const customTransition = {
   forwards: anim,
   backwards: anim,
@@ -35,7 +34,7 @@ const customTransition = {
 
 <style>
   #hexlists {
-    overflow: visible !important;
+    /* overflow: visible !important; */
   }
   .post-list {
     transition-property: all;
@@ -49,9 +48,10 @@ const customTransition = {
     rotate: 6deg;
   }
 </style>
+
 <ul
   id="hexlists"
-  class="h-full pl-12 flex flex-col gap-6 overflow-y-auto transition-[margin-left]"
+  class="h-full pl-14 flex flex-col gap-6 overflow-y-auto transition-[margin-left]"
   transition:animate={customTransition}
   transition:persist
   transition:name="post-list"
@@ -61,21 +61,24 @@ const customTransition = {
     allPosts.map(async (entry) => {
       const {
         id,
-        slug,
         data: { title, tags, summary },
       } = entry;
-      const { remarkPluginFrontmatter } = await entry.render();
+      const { remarkPluginFrontmatter } = await render(entry);
+
+      const hash = id.replaceAll('/', '-')
 
       const lastModified = dayjs(remarkPluginFrontmatter.lastModified)
         .utc()
         .toDate()
+
+      // TODO: fix chrome history 
       return (
         <li
           class="w-[100vw] post-list cursor-pointer"
+          id={hash}
           data-id={id}
-          data-slug={slug}
-        >
-          <a href={`/blog/${slug}`} data-astro-prefetch>
+          >
+        <a onclick={`history.replaceState({...history.state, id: '${id}' }, '', '#${id}');location.href = '/blog/${id}';`} href={`/blog/${id}`} data-astro-prefetch>
             <Hex>
               <div
                 slot="content"

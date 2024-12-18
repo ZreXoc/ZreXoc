@@ -5,5 +5,4 @@ hi!
 ![](https://img.shields.io/badge/-React-359CD6?style=flat-square&logo=React&logoColor=fff)
 ![](https://img.shields.io/badge/-Pytorch-ee4c2c?logo=pytorch&logoColor=fff)
 
-
 [![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=ZreXoc)](https://github.com/anuraghazra/github-readme-stats)

@@ -1,5 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"],
   "compilerOptions": {
     "jsx": "preserve",
     "baseUrl": ".",
@@ -7,6 +9,8 @@
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@utils/*": ["src/utils/*"]
-    }
+    },
+    "strictNullChecks": true,
+    "allowJs": true
   }
 }

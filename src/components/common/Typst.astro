@@ -1,0 +1,19 @@
+---
+import { Typst as Typ } from "astro-typst/src/components";
+
+export type Props = {
+  code: string;
+};
+
+const code = Astro.props.code;
+
+const transform = (code: string): string => {
+  return `
+#set page(height: auto, width: auto, margin: 0pt)
+
+${code}
+`;
+};
+---
+
+<Typ code={transform(code)} />

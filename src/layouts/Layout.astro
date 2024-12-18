@@ -1,6 +1,6 @@
 ---
 import { Breadcrumbs } from "astro-breadcrumbs";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import "../style.css";
 import "astro-breadcrumbs/breadcrumbs.css";
 interface Props {
@@ -21,10 +21,11 @@ const { title, className,withHeader=true } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body class={`bg-slate-100 ${className}`}>
     {withHeader?
+    // TODO: show closest header
     <header class="flex flex-row sticky top-0 h-6 bg-slate-400 z-10">
       <Breadcrumbs excludeCurrentPage={true}>
         <svg

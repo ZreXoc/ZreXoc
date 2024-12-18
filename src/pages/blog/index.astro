@@ -5,18 +5,18 @@ import PreviewPost from "@components/post/PreviewPost.astro";
 
 import PostList from "@/components/post/PostList.astro";
 
-import { getEntry, getEntries, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
 
-let allPosts = await getCollection("blog", ({data})=>{
-return !data.draft
+let allPosts = await getCollection("blog", ({ data }) => {
+  return true;
+  return !data.draft;
 });
 
-// console.log(allPosts);
+//console.log(allPosts);
 // allPosts = [...allPosts, ...allPosts];
 // allPosts = [...allPosts, ...allPosts];
 // allPosts = [...allPosts, ...allPosts];
 ---
-
 
 <script>
   let container: HTMLElement | null;
@@ -25,6 +25,9 @@ return !data.draft
   let previews: NodeListOf<HTMLDivElement>;
 
   let selectedId: string;
+
+  let datum: number;
+
   const pair = new Map<string, [HTMLLIElement | null, HTMLDivElement | null]>();
   document.addEventListener("astro:page-load", () => {
     container = document.getElementById("hexlists");
@@ -58,7 +61,12 @@ return !data.draft
         });
     });
 
-    switchSelected(pair.keys().next().value);
+    const hash = location.hash.slice(1);
+
+    setTimeout(() => {
+      if (hash || history.state?.id) focus(hash || history.state.id);
+      else switchSelected(pair.keys().next().value);
+    }, 100);
   });
 
   function setOffset() {
@@ -74,25 +82,29 @@ return !data.draft
           el.style.transform = "unset";
         });
         */
-        el.classList.add('selected')
+        el.classList.add("selected");
         return;
       }
 
+      datum = containerRect.top + containerRect.height * 0.2;
+
       const relativeY = childRect.top - containerRect.top;
-      const delta = Math.min(relativeY, containerRect.height - relativeY);
-      const calcML = (dy: number) => (dy < 0 ? -dy * 0.2 : dy * 0.8);
+      //const delta = Math.min(relativeY, containerRect.height - relativeY);
+      const deltaY = childRect.top - datum;
+      const calcML = (dy: number) => (dy < 0 ? -dy * 0.3 : dy * 0.15);
 
       // el.style.marginLeft = `${calcML(relativeY - containerRect.height * 0.7)}px`;
-      el.style.transform = `translateX(${calcML(relativeY - containerRect.height * 0.3)}px)`;
+      el.style.transform = `translateX(${calcML(deltaY)}px)`;
     });
   }
 
   function switchSelected(id?: string) {
-    if(!id) return;
+    if (!id) return;
     if (id == selectedId) {
-      //location.assign(`?post=${id}`)
+      //const hash = id.replaceAll('/', '-')
+      //location.assign(`#${hash}`);
       return;
-    } //TODO: jump
+    }
     const p = pair.get(id);
     if (!p) return;
     const [li, preview] = p;
@@ -105,13 +117,25 @@ return !data.draft
 
     preview.classList.remove("hidden");
     preview.classList.add("contents");
-    preview.getElementsByClassName("preview-post")[0]?.classList.add("active")
+    preview.getElementsByClassName("preview-post")[0]?.classList.add("active");
     li.classList.add("selected");
 
     selectedId = id;
 
     setOffset();
     //li.style.marginLeft = '0px';
+  }
+
+  function focus(id: string) {
+    switchSelected(id);
+    const p = pair.get(id);
+    if (!p) return;
+    const [li, _] = p;
+    if (!li) return;
+    container?.scroll({
+      top: li.offsetTop - datum,
+      behavior: "smooth",
+    });
   }
 
   function unselect(id: string) {
@@ -121,22 +145,21 @@ return !data.draft
     const [li, preview] = p;
 
     preview?.classList.add("hidden");
-    preview?.getElementsByClassName("preview-post")[0]?.classList.remove("active")
-    li?.classList.remove("selected")
+    preview
+      ?.getElementsByClassName("preview-post")[0]
+      ?.classList.remove("active");
+    li?.classList.remove("selected");
   }
 </script>
 
 <Layout title="blog">
-  <div class="flex h-[100vh] w-full">
-    <div class="flex flex-grow-1  flex-col h-full w-[100vw] lg:w-[60vw]">
+  <main class="flex h-[calc(100vh-24px)] w-full">
+    <div class="flex flex-grow-1 flex-col h-full w-[100vw] lg:w-[60vw]">
       <div id="previews" class="mt-[12%] w-full flex-1 p-8">
         {
           allPosts.map((entry, idx) => {
             return (
-              <div
-                class={"hidden"}
-                data-id={entry.id}
-              >
+              <div class={"hidden"} data-id={entry.id}>
                 <PreviewPost entry={entry} />
               </div>
             );
@@ -147,5 +170,5 @@ return !data.draft
     <div class="max-w-[50%] lg:max-w-[40%] overflow-x-hidden">
       <PostList {allPosts} />
     </div>
-  </div>
+  </main>
 </Layout>
