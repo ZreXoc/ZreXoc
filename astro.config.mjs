@@ -5,6 +5,7 @@ import icon from 'astro-icon';
 import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
 import remarkToc from 'remark-toc';
+import remarkRuby from 'remark-ruby';
 import rehypeJargon from 'rehype-jargon';
 import { jargon } from './src/content/jargon.mjs';
 import rehypeCallouts from 'rehype-callouts';
@@ -38,6 +39,7 @@ export default defineConfig({
       remarkMath,
       remarkGfm,
       remarkExtendedTable,
+      //remarkRuby,
       [remarkToc, { heading: '目录', maxDepth: 3 }],
       remarkReadingTime,
       remarkModifiedTime,

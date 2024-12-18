@@ -1,0 +1,8 @@
+---
+export type Props = {
+  rt: string;
+}
+const {rt} = Astro.props;
+---
+
+<ruby><slot/><rp>(</rp><rt>{rt}</rt><rp>)</rp></ruby>

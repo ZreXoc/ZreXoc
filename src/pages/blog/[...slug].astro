@@ -138,8 +138,8 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
         <span>
           <FormattedDate date={lastModified} />
         </span>
-        <span>{minutesRead.words}字</span>
-        <span>{minutesRead.text}</span>
+        <span>{minutesRead?.words}字</span>
+        <span>{minutesRead?.text}</span>
       </p>
       <hr />
       <Content />
