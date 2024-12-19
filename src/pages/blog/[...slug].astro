@@ -1,16 +1,16 @@
 ---
-import "rehype-callouts/theme/obsidian";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
+import 'rehype-callouts/theme/obsidian';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
-import Layout from "@/layouts/Layout.astro";
-import { getCollection, type CollectionEntry, render} from "astro:content";
-import { toIcon } from "@/utils/icon";
-import { Icon } from "astro-icon/components";
-import FormattedDate from "@/components/common/FormattedDate.astro";
+import Layout from '@/layouts/Layout.astro';
+import { getCollection, type CollectionEntry, render } from 'astro:content';
+import { toIcon } from '@/utils/icon';
+import { Icon } from 'astro-icon/components';
+import FormattedDate from '@/components/common/FormattedDate.astro';
 
 export async function getStaticPaths() {
-  const blogEntries: CollectionEntry<"blog">[] = await getCollection("blog");
+  const blogEntries: CollectionEntry<'blog'>[] = await getCollection('blog');
 
   return blogEntries.map((entry) => ({
     params: { slug: entry.id },
@@ -21,10 +21,8 @@ const { entry } = Astro.props;
 const data = entry.data;
 const { Content, remarkPluginFrontmatter } = await render(entry);
 const { minutesRead } = remarkPluginFrontmatter;
-console.log(minutesRead)
 
 const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
-
 ---
 
 <style is:global>
@@ -32,7 +30,7 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
     text-decoration: underline dotted #228be6;
   }
   .jargon-term::after {
-    content: "?";
+    content: '?';
     font-weight: bold;
     display: inline-block;
     transform: translate(0, -0.5em);
@@ -85,26 +83,26 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
   }
   .prose h2:not(#目录):before {
     counter-increment: h2counter;
-    content: counter(h2counter) ".\0000a0\0000a0";
+    content: counter(h2counter) '.\0000a0\0000a0';
   }
   .prose h3:before {
     counter-increment: h3counter;
-    content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
+    content: counter(h2counter) '.' counter(h3counter) '.\0000a0\0000a0';
   }
   .prose h4:before {
     counter-increment: h4counter;
-    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter)
-      ".\0000a0\0000a0";
+    content: counter(h2counter) '.' counter(h3counter) '.' counter(h4counter)
+      '.\0000a0\0000a0';
   }
   .prose h5:before {
     counter-increment: h5counter;
-    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter)
-      "." counter(h5counter) ".\0000a0\0000a0";
+    content: counter(h2counter) '.' counter(h3counter) '.' counter(h4counter)
+      '.' counter(h5counter) '.\0000a0\0000a0';
   }
   .prose h6:before {
     counter-increment: h6counter;
-    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter)
-      "." counter(h5counter) "." counter(h6counter) ".\0000a0\0000a0";
+    content: counter(h2counter) '.' counter(h3counter) '.' counter(h4counter)
+      '.' counter(h5counter) '.' counter(h6counter) '.\0000a0\0000a0';
   }
   .prose p > svg,
   .prose li > svg,
@@ -126,7 +124,13 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
   <main class="w-full">
     <div class="mx-auto my-4 prose lg:prose-xl prose-code:font-code">
       <h1>{data.title}</h1>
-      <p class="flex flex-row divide-x-2 divide-solid divide-slate-200 *:px-2 mb-0">
+      <p
+        class="flex flex-row divide-x-2 divide-solid divide-slate-200 *:px-2 mb-0"
+      >
+        {
+          /* TODO: <Icon/> 加载时间过长
+           */
+        }
         <span class="inline-flex gap-2">
           {
             data.tags

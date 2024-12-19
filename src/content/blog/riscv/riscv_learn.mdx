@@ -33,12 +33,32 @@ import Typst from '@components/common/Typst.astro';
 
     可以用`sub rd, rs1, -imm`来实现。
 
+### 逻辑运算
+
+| 指令  | 格式                 | 功能     |
+| ----- | :------------------- | :------- |
+| `and` | `and rd, rs1, rs2`   | 逻辑与   |
+| `or`  | `or rd, rs1, rs2`    | 逻辑或   |
+| `xor` | `xor rd, rs1, rs2`   | 逻辑异或 |
+| `sll` | `sll rd, rs1, shamt` | 逻辑左移 |
+| `srl` | `srl rd, rs1, shamt` | 逻辑右移 |
+| `sra` | `sra rd, rs1, shamt` | 算术右移 |
+
+`srl`相较于`sra`，`srl`右移后左侧补零，而`sra`会扩展符号位。
+
+> [!question]- 为什么没有`not`指令？
+> 可以用`xor rd, rs1, -1`来实现。
+
 ### 分支控制
 
-- `beq`: `beq rs1, rs2, L1`
-- `bne`: `bne rs1, rs2, L1`
-- `blt`: `blt rs1, rs2, L1`
-- `bge`: `bge rs1, rs2, L1`
+| 指令   | 格式                | 功能             |
+| ------ | :------------------ | :--------------- |
+| `beq`|`beq rs1, rs2, L1`| If `rs1==rs2` goto `L1` |
+| `bne`|`bne rs1, rs2, L1`| If `rs1!=rs2` goto `L1` |
+| `blt`|`blt rs1, rs2, L1`| If `rs1<rs2` goto `L1` |
+| `bge`|`bge rs1, rs2, L1`| If `rs1>=rs2` goto `L1` |
+| `bltu`|`bltu rs1, rs2, L1`| 上面两个条件的无符号版本|
+| `bgeu`|`bgeu rs1, rs2, L1`| ^ |
 
 > [!tip] Riscv的else语句通常放在if语句之前。
 >
@@ -61,21 +81,7 @@ import Typst from '@components/common/Typst.astro';
 >     ...
 > ```
 
-### 逻辑运算
 
-| 指令  | 格式                 | 功能     |
-| ----- | :------------------- | :------- |
-| `and` | `and rd, rs1, rs2`   | 逻辑与   |
-| `or`  | `or rd, rs1, rs2`    | 逻辑或   |
-| `xor` | `xor rd, rs1, rs2`   | 逻辑异或 |
-| `sll` | `sll rd, rs1, shamt` | 逻辑左移 |
-| `srl` | `srl rd, rs1, shamt` | 逻辑右移 |
-| `sra` | `sra rd, rs1, shamt` | 算术右移 |
-
-`srl`相较于`sra`，`srl`右移后左侧补零，而`sra`会扩展符号位。
-
-> [!question]- 为什么没有`not`指令？
-> 可以用`xor rd, rs1, -1`来实现。
 
 ### 伪指令
 
@@ -88,7 +94,32 @@ import Typst from '@components/common/Typst.astro';
 | `li` | `li rd, imm` | `addi rd, x0, imm` | 加载立即数 |
 | `nop` | `nop` | `addi x0, x0, 0` | 空操作 |
 
-### 函数调用
+### 加载与储存
+
+有时我们需要从内存中加载数据到寄存器中，或者将寄存器中的数据保存到内存中。
+我们将内存中数据的地址放在寄存器中，然后将数据读出或写入到另一个寄存器里。
+
+ | 指令  | 格式                 | 功能                                    |
+ | ----- | :------------------- | :-------                                |
+ | `lw`  | `lw rd, imm(rs1)`    | 从`rs1+imm`处取一个字到`rd`             |
+ | `lb`  | `lb rd, imm(rs1)`    | 从`rs1+imm`处取一个字节到`rd`           |
+ | `lbu` | `lb rd, imm(rs1)`    | 从`rs1+imm`处取一个字节(无符号数)到`rd` |
+ | `sw`  | `lb rs1, imm(rs2)`   | 保存`rs1`到`rs2+imm`处                  |
+ | `sb`  | `lb rs1, imm(rs2)`   | 保存`rs1`到`rs2+imm`处                  |
+
+例如，从栈里取一个字：
+```asm
+lw t0, 0(sp)
+```
+栈和寄存器`sp`的概念稍后就会讲到
+
+这里要注意数据流动的方向：
+
+- load: `rd`(寄存器)←`rs1+imm`(内存)
+- store: `rs1`(寄存器)→`rs2+imm`(内存)
+
+
+### 函数调用与跳转
 
 函数调用的六个步骤：
 
@@ -132,6 +163,35 @@ import Typst from '@components/common/Typst.astro';
 
 栈是一种先进后出的数据结构，用来保存函数调用时的临时变量。我们使用`sp`寄存器来指向栈顶，`sp`自增或自减来移动栈顶指针。要注意的是，栈是一块连续的内存空间，_由高地址向低地址增长_，故增长栈的时候，栈指针`sp`要向低地址移动，反之增加。
 
+<Typst code={`
+#import "@preview/cetz:0.3.1"
+
+#cetz.canvas(
+{
+import cetz.draw: \*
+
+    content((0, 2), [栈])
+
+    content((2, -0.5), [栈顶:0x000000])
+    grid((1, 0), (3, 7), step: (2, 1))
+    content((2, 7.5), [栈底:0xFFFFF0])
+
+    set-style(mark: (start: ">"))
+    mark(
+      (rel: (1.3, -2)), (rel: (0.3, 0), update: false), symbol: "<", fill: black,
+    )
+    content((rel: (0.3, 0), update: false), [sp])
+
+    mark(
+      (rel: (0, -2)), (rel: (0.5, 0), update: false), symbol: "<", fill: black,
+    )
+    content((rel: (0.4, 0), update: false), [8(sp)])
+
+},
+)
+
+`} />
+
 例子：
 
 ```c
@@ -170,36 +230,6 @@ Leaf:
 
 ~~_prologue_ 是施法前摇，而 _epilogue_ 是后摇。~~
 
-<Typst code={`
-
-#import "@preview/cetz:0.3.1"
-
-#cetz.canvas(
-{
-import cetz.draw: \*
-
-    content((0, 2), [栈])
-
-    content((2, -0.5), [栈顶:0x000000])
-    grid((1, 0), (3, 7), step: (2, 1))
-    content((2, 7.5), [栈底:0xFFFFF0])
-
-    set-style(mark: (start: ">"))
-    mark(
-      (rel: (1.3, -2)), (rel: (0.3, 0), update: false), symbol: "<", fill: black,
-    )
-    content((rel: (0.3, 0), update: false), [sp])
-
-    mark(
-      (rel: (0, -2)), (rel: (0.3, 0), update: false), symbol: "<", fill: black,
-    )
-    content((rel: (0.3, 0), update: false), [s1])
-
-},
-)
-
-`} />
-
 #### 嵌套函数的返回
 
 设想这样的场景：函数A调用函数B，记录下A的栈指针；B又调用C，记录下B的栈指针。但问题是，我们只有一个栈指针寄存器`sp`，怎么保存函数调用过程中的两个栈指针呢？
@@ -218,7 +248,7 @@ temporary regiters t0 - t6
 
 | 寄存器   | ABI名称 | 功能                     | Saver  |
 | :------- | :------ | :----------------------- | :----: |
-| `x0`     | `$zero` | 硬编码0                  |   -    |
+| `x0`     | `$zero` | 硬编码为0                  |   -    |
 | `x1`     | `ra`    | 返回地址                 | Caller |
 | `x2`     | `sp`    | 栈指针                   | Callee |
 | `x3`     | `gp`    | 全局指针                 |   -    |
@@ -241,9 +271,78 @@ temporary regiters t0 - t6
 
 Caller-saved指的是，在调用函数之前，调用者需要自己保存的寄存器，比如为了传递参数，需要覆盖参数寄存器`a0-a7`，这些寄存器的原始值就需要调用者保存，即放到栈上，以便在被调用函数返回时恢复。（实际上恢不恢复由具体情况决定，总之是调用者在管理）
 
-Callee-saved保存指的是，在调用函数时，被Caller需要保存的寄存器，比如`s0-s11`，被调用函数需要[提前保存原始值并在返回时恢复](#栈)。
+Callee-saved指的是，在调用函数时，Callee需要保存的寄存器，比如`s0-s11`，被调用函数需要[提前保存原始值并在返回时恢复](#栈)。
+
+区分二者最简单的方法就是看Callee退出时需不需要恢复其值，如果需要，就属于Callee-saved；否则就属于Caller-saved。
 
 | Caller保存寄存器     | Callee保存寄存器                                |
 | -------------------- | ----------------------------------------------- |
 | 函数调用前后可能改变 | 函数调用前后不变                                |
-| 会被Callee污染       | 需要被Caller维护，防止污染<br/>“谁污染，谁治理” |
+| 会被Callee污染       | 需要Callee维护，防止污染<br/>“谁污染，谁治理” |
+
+### 程序的位置
+
+一个简单的程序在riscv上运行时在内存里的位置如图：
+
+<Typst code={`
+#import "@preview/cetz:0.3.1"
+#cetz.canvas(
+  {
+    import cetz.draw: *
+
+    group({
+      rect((rel: (0, 0)), (rel: (3, 1)), name: "rect")
+      content("rect", [Reserved])
+      content("rect.south-west", [$0" "$], anchor: "mid-east")
+    }, name: "Reserved")
+    group(
+      {
+        rect("Reserved.rect.north-west", (rel: (3, 3)), name: "rect")
+        content("rect", [Text])
+        content("rect.south-west", [pc = $"0001 0000"_("hex")" "$], anchor: "mid-east")
+      }, name: "Text",
+    )
+    group(
+      {
+        rect("Text.rect.north-west", (rel: (3, 1)), name: "rect")
+        content("rect", [Static])
+        content("rect.south-west", [pc = $"1000 0000"_("hex")" "$], anchor: "mid-east")
+      }, name: "Static",
+    )
+    group(
+      {
+        hide(content("Static.rect.north-west", []))
+        rect((), (rel: (3, 4)), name: "rect")
+
+        hide(line("rect.south", (rel: (0, 0))))
+        content((rel: (0, 0.3), update: false), [Dynamic Data], name: "c1")
+        hide(line("rect.north", (rel: (0, 0))))
+        content((rel: (0, -0.3), update: false), [Stack], name: "c2")
+        content("rect.north-west", [Sp = $"bfff fff0"_("hex")" "$], anchor: "mid-east")
+
+        set-style(mark: (end: ">"))
+        hide(line("c1.north", (rel: (0, 0.1))))
+        line((), (rel: (0, 0.8)))
+        hide(line("c2.south", (rel: (0, -0.1))))
+        line((), (rel: (0, -0.8)))
+      },
+    )
+  },
+)
+`} />
+
+其中：
+- `Reserved`：保留空间，系统调用、io等就在这里
+- `Text`：代码段，由`pc`指向当前代码的位置
+- `Static`：静态数据(即全局变量)
+- `Dynamic Data`：动态数据，`malloc`分配的空间就在这里
+-  `Stack`：栈。
+
+
+## 小结
+
+有了以上知识，我们就可以用汇编来实现几乎所有的程序了，其他的无非是一些系统调用和“让我们生活更加轻松的东西”。
+
+芜湖！
+
+{/* 来个字符画 */}
