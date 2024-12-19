@@ -11,9 +11,12 @@ const transform = (code: string): string => {
   return `
 #set page(height: auto, width: auto, margin: 0pt)
 
+#v(0.2em)
 ${code}
 `;
 };
 ---
 
-<Typ code={transform(code)} />
+<div class="w-fit mx-auto">
+  <Typ code={transform(code)} />
+</div>
