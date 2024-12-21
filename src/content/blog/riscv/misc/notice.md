@@ -20,8 +20,7 @@ preview: src/assets/icons/riscv.svg
 刚开始跟着`CS61C`学到riscv时，我发现gcc编译出来的二进制文件由于包含了标准库导致文件很大，便选择了在汇编时不使用标准库：
 
 ```sh
-riscv32-unknown-elf-gcc -g -nostdlib -static "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)"
-```
+riscv32-unknown-elf-gcc -g -nostdlib -static "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" ```
 
 没想到就这个举动导致我花了整整一个下午来排查。>:(
 
@@ -131,4 +130,13 @@ Disassembly of section .text:
 > [!quote]>[RISC-V 中的 global pointer 寄存器](https://gitee.com/aosp-riscv/working-group/blob/master/articles/20230408-global-pointer.md)
 > 虽然看上去是要我们写程序（program）时自己去初始化这个 gp 寄存器，但实际上这个动作都是由 c 库帮助我们去完成的，ISA 规范中也提了最好是在 _start 中做，就是比较晦涩没有明说是 c 库
 
-那么我们要么禁用链接器松弛，要么带上c库一起走。~~结案。~~ 那么为什么`word1`就没有这个优化？暂时作为一个未解之谜。
+那么我们要么禁用链接器松弛，要么带上c库一起走。经过群友提示，还可以用`lla`替代`la`来禁止这个行为：
+> la 
+> 地址加载 (Load Address). 伪指令(Pseudoinstruction), RV32I and RV64I.
+> 将 symbol 的地址加载到 x\[rd\]中。当编译位置无关的代码时，它会被扩展为对全局偏移量表
+> (Global Offset Table)的加载。对于 RV32I，等同于执行 auipc rd, offsetHi，然后是 lw rd，
+> offsetLo(rd);对于 RV64I，则等同于 auipc rd，offsetHi 和 ld rd, offsetLo(rd)。**如果 offset 过大，开始的算加载地址的指令会变成两条，先是 auipc rd, offsetHi 然后是 addi rd, rd, offsetLo**。
+> (http://staff.ustc.edu.cn/~llxx/cod/reference_books/RISC-V-Reader-Chinese-v2p12017.pdf)
+
+
+~~结案。~~ 那么为什么`word1`就没有这个优化？是上面的`offset`过大`0x1`刚好在`0x800`-2KB的边界？暂时作为一个未解之谜。
