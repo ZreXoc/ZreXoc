@@ -234,9 +234,7 @@ Leaf:
 
 设想这样的场景：函数A调用函数B，记录下A的栈指针；B又调用C，记录下B的栈指针。但问题是，我们只有一个栈指针寄存器`sp`，怎么保存函数调用过程中的两个栈指针呢？
 
-CalleR CallE
-
-保存的
+{/*
 
 preserved
 sp gp tp
@@ -246,6 +244,7 @@ not preserve , voltale / temporary
 argument registers a0 to a7, ra
 temporary regiters t0 - t6
 
+*/}
 | 寄存器   | ABI名称 | 功能                     | Saver  |
 | :------- | :------ | :----------------------- | :----: |
 | `x0`     | `$zero` | 硬编码为0                  |   -    |

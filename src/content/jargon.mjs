@@ -7,4 +7,5 @@ export const jargon = {
   epilogue: '结语',
   caller: '调用者',
   callee: '被调用者',
+  链接器松弛: 'linker relaxation',
 };

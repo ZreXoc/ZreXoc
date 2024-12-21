@@ -88,7 +88,7 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
       <span>
         <FormattedDate date={lastModified} />
       </span>
-      {[, minutesRead.text].map((t) => <span>{t}</span>)}
+      {[, minutesRead?.text].map((t) => <span>{t}</span>)}
     </p>
     <p class="description overflow-y-auto">
       {data.description}
