@@ -8,4 +8,6 @@ export const jargon = {
   caller: '调用者',
   callee: '被调用者',
   链接器松弛: 'linker relaxation',
+  顶点: "vertex",
+  边: "edge"
 };
