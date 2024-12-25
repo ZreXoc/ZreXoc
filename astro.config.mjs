@@ -38,7 +38,12 @@ export default defineConfig({
     remarkPlugins: [
       remarkMath,
       remarkGfm,
-      remarkExtendedTable,
+      [
+        remarkExtendedTable,
+        {
+          colspanWithEmpty: true,
+        },
+      ],
       //remarkRuby,
       [remarkToc, { heading: '目录', maxDepth: 3 }],
       remarkReadingTime,
