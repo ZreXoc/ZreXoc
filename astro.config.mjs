@@ -21,6 +21,7 @@ import { typst } from 'astro-typst';
 import vue from '@astrojs/vue';
 import tailwind from '@astrojs/tailwind';
 
+import pdf from 'astro-pdf';
 import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
@@ -85,6 +86,27 @@ export default defineConfig({
     typst(),
     icon({
       iconDir: 'src/assets/icons',
+    }),
+    pdf({
+      baseOptions: {
+        maxRetries: 2,
+        throwOnFail: true
+      },
+      //maxConcurrent: 2,
+
+      pages: {
+        //'/blog': true, // output path
+        '/blog/course/discrete/terms': true,
+        '/blog/riscv/commands/riscv_learn': true,
+        '/blog/riscv/misc/notice': true,
+        /*
+         *fallback: (pathname) => {
+         *  if (pathname.startsWith('/blog/riscv')) {
+         *    return pathname.replace(/^\/blog/, '/generated');
+         *  }
+         *},
+         */
+      },
     }),
   ],
 });

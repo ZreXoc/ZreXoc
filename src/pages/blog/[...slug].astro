@@ -26,6 +26,7 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
 ---
 
 <style is:global>
+  /* TODO: 表格跨行文本上下居中*/
   .jargon-term {
     text-decoration: underline dotted #228be6;
   }
@@ -136,7 +137,7 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
             data.tags
               .slice(0, 1)
               .map((t) => toIcon(t))
-              .map((t) => <Icon class="h-auto" name={t} />)
+              .map((t) => <span class="h-auto" name={t} />)
           }
         </span>
         <span>
