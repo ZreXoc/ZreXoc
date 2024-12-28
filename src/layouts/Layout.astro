@@ -8,6 +8,7 @@ interface Props {
   className?: string;
   withHeader?: boolean
 }
+import Gtag from './Gtag.astro'
 
 const { title, className,withHeader=true } = Astro.props;
 ---
@@ -21,6 +22,7 @@ const { title, className,withHeader=true } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <Gtag/>
     <ClientRouter />
   </head>
   <body class={`bg-slate-100 ${className}`}>
