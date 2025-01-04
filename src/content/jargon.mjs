@@ -9,5 +9,7 @@ export const jargon = {
   callee: '被调用者',
   链接器松弛: 'linker relaxation',
   顶点: "vertex",
-  边: "edge"
+  边: "edge",
+  字段: "field",
+  ISA: "Instruction Set Architecture",
 };

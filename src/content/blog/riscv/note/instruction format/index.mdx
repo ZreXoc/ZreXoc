@@ -1,0 +1,267 @@
+---
+title: Riscv 学习笔记 - 指令格式
+category: technique
+tags:
+  - Riscv
+summary: 核心指令格式R/I/S/B/J的介绍。
+description: 核心指令格式R/I/S/B/J的介绍。
+preview: src/assets/icons/riscv.svg
+---
+
+import Typst from '@components/common/Typst.astro';
+import R from '@components/common/Ruby.astro'
+
+在上一篇文章中，我们介绍了RISC-V指令集架构的基本概念和指令集体系结构。有没有想过，这些指令是怎么编码成二进制的呢？
+
+本文以32位指令集为例，将介绍RISC-V指令集架构的五种核心指令格式$R\/I\/S\/B\/J$。
+
+## RISC-V 基本指令格式
+
+在RISC-V中，我们将每条指令译为32位二进制编码，而基本 _ISA_ 中有五种指令格式：
+
+- $R$ 类型指令：用于算术运算、逻辑运算、移位运算、比较运算等。
+- $I$ 类型指令：用于加载立即数等。
+- $S$ 类型指令：用于存储指令，用于将数据从存储器中读出或写入到存储器中。
+- $B$ 类型指令：用于有条件跳转指令。
+- $J$ 类型指令：用于无条件跳转指令。
+
+可以直观地理解为跟据汇编指令的格式，将指令分为不同的类型，每种类型都有自己的编码格式。
+
+不同类型的指令译码后的格式不完全相同，但基本的思想是一致的：
+
+> [!note]
+> - 尽可能保持寄存器的编码位置不变，然后插入立即数。
+> - 尽可能节省空间放更多的东西。
+
+下面我们将介绍这五种指令格式。
+
+### "R" 类型指令
+
+**R** 类型指令用于算术运算、逻辑运算、移位运算、比较运算等 _寄存器-寄存器操作_ ，算是最简单的类型。
+
+> `add rd, rs1, rs2`
+
+<Typst code={`
+#import "@preview/cetz:0.3.1"
+#import "src/content/blog/riscv/helper.typ":*
+
+#cetz.canvas({
+field(3, [funct7], 31, 25)
+field(2, [rs2], 24, 20)
+field(2, [rs1], 19, 15)
+field(2, [funct3], 14, 12)
+field(2, [rd], 11, 7)
+field(2, [opcode], 6, 0)
+})
+`} />
+
+在小小的一个字（32位）内，我们放入了五个 _字段_ ：
+
+| 字段     | 含义            |
+| -------- | --------------- |
+| `funct7` | 7位的立即数     |
+| `rs2`    | 2位的源寄存器   |
+| `rs1`    | 2位的源寄存器   |
+| `funct3` | 3位的功能码     |
+| `rd`     | 2位的目的寄存器 |
+| `opcode` | 6位的操作码     |
+
+可以看到，`rd`，`rs1`，`rs2` 这三个字段分别占用了5位，刚好对应32个寄存器。
+
+`opcode` 这里硬编码为`0110011`，表示这是一个 `R` 类型指令。`funct3`是功能码，用于区分不同指令，比如`000`对应`add`指令。
+
+`funct7` 则用于表示一些比较特殊的操作，比如`sub`指令的`funct7`为`0100000`，这个`1`就是指要扩展符号位，后面的`srli`和`srai`就只有这里不同。
+
+### "I" 类型指令
+
+**I** 类型指令用于加载等操作。
+
+<Typst code={`
+#import "@preview/cetz:0.3.1"
+#import "src/content/blog/riscv/helper.typ":*
+
+#cetz.canvas({
+field(3, [imm[11:0]], 31, 20)
+field(2, [rs1], 19, 15)
+field(2, [funct3], 14, 12)
+field(2, [rd], 11, 7)
+field(2, [opcode], 6, 0)
+})
+`} />
+
+可以看到，`I` 类型指令的编码格式跟 `R` 类型指令的格式非常相似，只是把 `funct7`
+和 `rs2` 字段换成了 `imm` 字段，用于表示立即数。（`imm`一定是有符号的，不用考虑符号扩展的问题。）
+以及这里的`opcode`是`0010011`。
+
+需要注意的是，`imm` 字段的位宽为12位，也就是说，我们只能使用(-2048, 2047)的立即数，然后这个数会被扩展到32位。
+
+> [!TIP] 没有`lwu`指令，因为没有位需要扩展。
+
+### "U" 类型指令
+
+U 类型指令用于长立即数。
+
+<Typst code={`
+#import "@preview/cetz:0.3.1"
+#import "src/content/blog/riscv/helper.typ":*
+
+#cetz.canvas({
+field(3, [imm[31:12]], 31, 12)
+field(2, [rd], 11, 7)
+field(2, [opcode], 6, 0)
+})
+`} />
+
+通过`lui`和`auipc`指令，我们可以将高20位放入指定寄存器/`pc`中，然后再设置低位即可获得完整的32位立即数。
+
+```asm
+lui x10, 0xFEDC # x10 = 0xFEDC0000
+addi x10, x10, 0x1234 # x10 = 0xFEDC1234
+```
+
+### "S" 类型指令
+
+S 类型指令用于存储操作，例如将寄存器中的数据存储到内存中。
+
+<Typst code={`
+#import "@preview/cetz:0.3.1"
+#import "src/content/blog/riscv/helper.typ":*
+
+#cetz.canvas({
+field(3, [imm[11:5]], 31, 25)
+field(2, [rs2], 24, 20)
+field(2, [rs1], 19, 15)
+field(2, [funct3], 14, 12)
+field(3, [imm[4:0]], 11, 7)
+field(2, [opcode], 6, 0)
+})
+`} />
+
+这里很有意思的一点是，`imm`被分成了两部分，高位为 `imm[11:5]`，低位为
+`imm[4:0]`。还记得一开始我们说过，_尽可能保持寄存器的编码位置不变，然后放入立即数。_ 就是这个意思。
+
+
+### "B" 类型指令
+B 类型指令用于有条件跳转指令。
+
+<Typst code={`
+#import "@preview/cetz:0.3.1"
+#import "src/content/blog/riscv/helper.typ":*
+
+#cetz.canvas({
+field(3, [imm[12|10:5]], 31, 25)
+field(2, [rs2], 24, 20)
+field(2, [rs1], 19, 15)
+field(2, [funct3], 14, 12)
+field(3, [imm[4:1|11]], 11, 7)
+field(2, [opcode], 6, 0)
+})
+`} />
+
+这里的 `imm` 字段切得更碎了，高位为 `imm[12|10:5]`，低位为
+`imm[4:1|11]`。有没有发现什么东西消失了？
+
+指令是如何用`imm`来表示跳转地址的？我们知道RISC-V使用`pc`来表示当前程序的位置，当正常执行时，完成一条指令，`pc`就会自动加4，即偏移量为一个字的长度，指向下一条指令的开头位置。
+```c
+pc = pc + 4;
+```
+
+但当在分支跳转时，我们指定了`rs2`及偏移量，这个偏移量显然不能乱取，使`pc`指向指令中间的位置导致可怕的结果，故偏移量必须为4的倍数。同时我们又要尽可能节省空间放更多的东西，不如让偏移量为`imm`的4倍。
+
+```c
+pc = pc + imm * 4;
+```
+
+但实际上，为了兼容16位的指令集，工程师们让偏移量为2的倍数，即：
+```c
+pc = pc + imm * 2;
+```
+
+偏移量是2的倍数，即最低位一定是0，故我们可以直接把最低位丢掉，这也是上图中没有`imm[0]`的原因。
+
+### "J" 类型指令
+
+J 类型指令用于无条件跳转指令。这个简单。
+
+<Typst code={`
+#import "@preview/cetz:0.3.1"
+#import "src/content/blog/riscv/helper.typ":*
+
+#cetz.canvas({
+field(4, [imm[20|10:1|11|19:12]], 31, 12)
+field(2, [rd], 11, 7)
+field(4, [opcode], 6, 0)
+})
+`} />
+
+## 总结
+
+
+<Typst code={`
+#import "@preview/cetz:0.3.1"
+#import "src/content/blog/riscv/helper.typ":*
+
+#cetz.canvas({
+  group({
+    for i in range(32){
+      content((rel:(0.5, 0)), [#(31 - i)])
+    }
+  }, name: "g1")
+  hide(content("g1.south-west", []))
+  hide(content((rel: (-0.06, -0.6)), []))
+  group({
+    field2([imm[20|10:1|12|19:12]], 31, 12, name: "field1")
+    field2([rd], 11, 7)
+    field2([opcode], 6, 0)
+    field2([R-type], 3, 0)
+  }, name: "g1")
+  hide(content("g1.south-west", []))
+  hide(content((rel: (0, -0.5)), []))
+  group({
+    field2([imm[31:12]], 31, 12)
+    field2([rd], 11, 7)
+    field2([opcode], 6, 0)
+    field2([U-type], 3, 0)
+  }, name: "g7")
+  hide(content("g7.south-west", []))
+  hide(content((rel: (0, -0.5)), []))
+  group({
+    field2([imm[11:0]], 31, 20)
+    field2([rs1], 19, 15)
+    field2([funct3], 14, 12)
+    field2([rd], 11, 7)
+    field2([opcode], 6, 0)
+    field2([I-type], 3, 0)
+  }, name: "g6")
+  hide(content("g6.south-west", []))
+  hide(content((rel: (0, -0.5)), []))
+  group({
+    field2([imm[11:5]], 31, 25)
+    field2([rs2], 24, 20)
+    field2([rs1], 19, 15)
+    field2([funct3], 14, 12)
+    field2([imm[4:0]], 11, 7)
+    field2([opcode], 6, 0)
+    field2([S-type], 3, 0)
+  }, name: "g2")
+  hide(content("g2.south-west", []))
+  hide(content((rel: (0, -0.5)), []))
+  group({
+    field2([imm[12|10:5]], 31, 25)
+    field2([rs2], 24, 20)
+    field2([rs1], 19, 15)
+    field2([funct3], 14, 12)
+    field2([imm[4:1|11]], 11, 7)
+    field2([opcode], 6, 0)
+    field2([B-type], 3, 0)
+  }, name: "g3")
+  hide(content("g3.south-west", []))
+  hide(content((rel: (0, -0.5)), []))
+  group({
+    field2([imm[20|10:1|11|19:12]], 31, 12)
+    field2([rd], 11, 7)
+    field2([opcode], 6, 0)
+    field2([J-type], 3, 0)
+  }, name: "g4")
+})
+`} />
