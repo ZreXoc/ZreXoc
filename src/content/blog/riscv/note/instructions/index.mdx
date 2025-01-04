@@ -1,10 +1,13 @@
 ---
-title: Riscv 学习笔记
+title: Riscv学习笔记 - 常用指令
 category: technique
 tags:
   - Riscv
-summary: 关于Riscv的个人学习笔记
-description: 关于Riscv的个人学习笔记,仅做参考。
+summary: 算术、逻辑、分支控制、加载储存、函数调用跳转
+description:
+    riscv中常用的指令，包括算术运算、逻辑运算、分支控制、伪指令、加载与储存、函数调用与跳转。
+    以及对栈、寄存器、立即数的一些概念的简单介绍。
+
 preview: src/assets/icons/riscv.svg
 ---
 
@@ -104,8 +107,8 @@ import Typst from '@components/common/Typst.astro';
  | `lw`  | `lw rd, imm(rs1)`    | 从`rs1+imm`处取一个字到`rd`             |
  | `lb`  | `lb rd, imm(rs1)`    | 从`rs1+imm`处取一个字节到`rd`           |
  | `lbu` | `lb rd, imm(rs1)`    | 从`rs1+imm`处取一个字节(无符号数)到`rd` |
- | `sw`  | `lb rs1, imm(rs2)`   | 保存`rs1`到`rs2+imm`处                  |
- | `sb`  | `lb rs1, imm(rs2)`   | 保存`rs1`到`rs2+imm`处                  |
+ | `sw`  | `sw rs1, imm(rs2)`   | 保存`rs1`到`rs2+imm`处                  |
+ | `sb`  | `sb rs1, imm(rs2)`   | 保存`rs1`到`rs2+imm`处                  |
 
 例如，从栈里取一个字：
 ```asm
