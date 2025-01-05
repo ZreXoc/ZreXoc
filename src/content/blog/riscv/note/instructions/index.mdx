@@ -5,8 +5,8 @@ tags:
   - Riscv
 summary: 算术、逻辑、分支控制、加载储存、函数调用跳转
 description:
-    riscv中常用的指令，包括算术运算、逻辑运算、分支控制、伪指令、加载与储存、函数调用与跳转。
-    以及对栈、寄存器、立即数的一些概念的简单介绍。
+  riscv中常用的指令，包括算术运算、逻辑运算、分支控制、伪指令、加载与储存、函数调用与跳转。
+  以及对栈、寄存器、立即数的一些概念的简单介绍。
 
 preview: src/assets/icons/riscv.svg
 ---
@@ -54,14 +54,14 @@ import Typst from '@components/common/Typst.astro';
 
 ### 分支控制
 
-| 指令   | 格式                | 功能             |
-| ------ | :------------------ | :--------------- |
-| `beq`|`beq rs1, rs2, L1`| If `rs1==rs2` goto `L1` |
-| `bne`|`bne rs1, rs2, L1`| If `rs1!=rs2` goto `L1` |
-| `blt`|`blt rs1, rs2, L1`| If `rs1<rs2` goto `L1` |
-| `bge`|`bge rs1, rs2, L1`| If `rs1>=rs2` goto `L1` |
-| `bltu`|`bltu rs1, rs2, L1`| 上面两个条件的无符号版本|
-| `bgeu`|`bgeu rs1, rs2, L1`| ^ |
+| 指令   | 格式                | 功能                     |
+| ------ | :------------------ | :----------------------- |
+| `beq`  | `beq rs1, rs2, L1`  | If `rs1==rs2` goto `L1`  |
+| `bne`  | `bne rs1, rs2, L1`  | If `rs1!=rs2` goto `L1`  |
+| `blt`  | `blt rs1, rs2, L1`  | If `rs1<rs2` goto `L1`   |
+| `bge`  | `bge rs1, rs2, L1`  | If `rs1>=rs2` goto `L1`  |
+| `bltu` | `bltu rs1, rs2, L1` | 上面两个条件的无符号版本 |
+| `bgeu` | `bgeu rs1, rs2, L1` | ^                        |
 
 > [!tip] Riscv的else语句通常放在if语句之前。
 >
@@ -84,8 +84,6 @@ import Typst from '@components/common/Typst.astro';
 >     ...
 > ```
 
-
-
 ### 伪指令
 
 这些指令并不是可执行的指令，没有相应机器码，在编译时会被替换成其他指令。
@@ -94,33 +92,38 @@ import Typst from '@components/common/Typst.astro';
 | 指令 | 格式 | 对应指令 | 功能 |
 | - | :- | :- | :- |
 | `mv` | `mv rd, rs` | `addi rs, rs, 0` | 移动寄存器的值 |
+| `neg` | `neg t0, t1` | `sub t0, zero, t1` | 取负数（补码） |
+| `not` | `not t0, t1` | `xori t0, t1, -1` | 取反码 |
 | `li` | `li rd, imm` | `addi rd, x0, imm` | 加载立即数 |
+| `la` | `la t0, str` | `lui t0, str[31:12]; addi t0, t0, str[11:0]`或<br/>`auipc t0, str[31:12]; addi t0, t0, str[11:0]` <br/> 详见[下一节](./instruction-format#b-类型指令) | 加载地址 |
 | `nop` | `nop` | `addi x0, x0, 0` | 空操作 |
+| `beqz` | `beqz t0, loop` | `beq t0, zero, loop` | `t0==0`时跳转 |
 
 ### 加载与储存
 
 有时我们需要从内存中加载数据到寄存器中，或者将寄存器中的数据保存到内存中。
 我们将内存中数据的地址放在寄存器中，然后将数据读出或写入到另一个寄存器里。
 
- | 指令  | 格式                 | 功能                                    |
- | ----- | :------------------- | :-------                                |
- | `lw`  | `lw rd, imm(rs1)`    | 从`rs1+imm`处取一个字到`rd`             |
- | `lb`  | `lb rd, imm(rs1)`    | 从`rs1+imm`处取一个字节到`rd`           |
- | `lbu` | `lb rd, imm(rs1)`    | 从`rs1+imm`处取一个字节(无符号数)到`rd` |
- | `sw`  | `sw rs1, imm(rs2)`   | 保存`rs1`到`rs2+imm`处                  |
- | `sb`  | `sb rs1, imm(rs2)`   | 保存`rs1`到`rs2+imm`处                  |
+| 指令  | 格式               | 功能                                    |
+| ----- | :----------------- | :-------------------------------------- |
+| `lw`  | `lw rd, imm(rs1)`  | 从`rs1+imm`处取一个字到`rd`             |
+| `lb`  | `lb rd, imm(rs1)`  | 从`rs1+imm`处取一个字节到`rd`           |
+| `lbu` | `lb rd, imm(rs1)`  | 从`rs1+imm`处取一个字节(无符号数)到`rd` |
+| `sw`  | `sw rs1, imm(rs2)` | 保存`rs1`到`rs2+imm`处                  |
+| `sb`  | `sb rs1, imm(rs2)` | 保存`rs1`到`rs2+imm`处                  |
 
 例如，从栈里取一个字：
+
 ```asm
 lw t0, 0(sp)
 ```
+
 栈和寄存器`sp`的概念稍后就会讲到
 
 这里要注意数据流动的方向：
 
 - load: `rd`(寄存器)←`rs1+imm`(内存)
 - store: `rs1`(寄存器)→`rs2+imm`(内存)
-
 
 ### 函数调用与跳转
 
@@ -134,7 +137,7 @@ lw t0, 0(sp)
 - 移交控制权给主处理器(`ret`)
 
 | 指令   | 格式                   | 功能               | 对应指令        |
-| ------ | :--------------------- | :----------------- | :-------------- | 
+| ------ | :--------------------- | :----------------- | :-------------- |
 | `j`    | `j label`              | 跳转               | `jal x0, label` |
 | `jr`   | `jr rs1`               | 跳转到寄存器       |                 |
 | `jal`  | `jal rd, label`        | 跳转并链接         |                 |
@@ -143,7 +146,9 @@ lw t0, 0(sp)
 
 `jal` 相当于`addi ra, zero, imm; j label`，省去每次都手动设置返回地址的麻烦。
 但实际上j才是伪指令，这里只是说作用上的的等价。
+
 > [!tip]
+>
 > ```asm
 > 1008 addi ra, zero, 1016
 > 1012 sum
@@ -248,21 +253,21 @@ argument registers a0 to a7, ra
 temporary regiters t0 - t6
 
 */}
-| 寄存器   | ABI名称 | 功能                     | Saver  |
+| 寄存器 | ABI名称 | 功能 | Saver |
 | :------- | :------ | :----------------------- | :----: |
-| `x0`     | `$zero` | 硬编码为0                  |   -    |
-| `x1`     | `ra`    | 返回地址                 | Caller |
-| `x2`     | `sp`    | 栈指针                   | Callee |
-| `x3`     | `gp`    | 全局指针                 |   -    |
-| `x4`     | `tp`    | 线程指针                 |   -    |
-| `x5`     | `t0`    | 临时寄存器               | Caller |
-| `x6-7`   | `t1-2`  | 临时寄存器               | Caller |
-| `x8`     | `s0/fp` | 保存寄存器/帧指针        | Callee |
-| `x9`     | `s1`    | 保存寄存器               | Callee |
-| `x10-11` | `a0-1`  | 参数寄存器、返回值寄存器 | Caller |
-| `x12-17` | `a2-7`  | 参数寄存器               | Caller |
-| `x18-27` | `s2-11` | 保存寄存器               | Callee |
-| `x28-31` | `t3-6`  | 临时寄存器               | Caller |
+| `x0` | `$zero` | 硬编码为0 | - |
+| `x1` | `ra` | 返回地址 | Caller |
+| `x2` | `sp` | 栈指针 | Callee |
+| `x3` | `gp` | 全局指针 | - |
+| `x4` | `tp` | 线程指针 | - |
+| `x5` | `t0` | 临时寄存器 | Caller |
+| `x6-7` | `t1-2` | 临时寄存器 | Caller |
+| `x8` | `s0/fp` | 保存寄存器/帧指针 | Callee |
+| `x9` | `s1` | 保存寄存器 | Callee |
+| `x10-11` | `a0-1` | 参数寄存器、返回值寄存器 | Caller |
+| `x12-17` | `a2-7` | 参数寄存器 | Caller |
+| `x18-27` | `s2-11` | 保存寄存器 | Callee |
+| `x28-31` | `t3-6` | 临时寄存器 | Caller |
 
 | Preserved(callee-saved)  | NonPreserved(caller-saved)  |
 | ------------------------ | --------------------------- |
@@ -277,9 +282,9 @@ Callee-saved指的是，在调用函数时，Callee需要保存的寄存器，�
 
 区分二者最简单的方法就是看Callee退出时需不需要恢复其值，如果需要，就属于Callee-saved；否则就属于Caller-saved。
 
-| Caller保存寄存器     | Callee保存寄存器                                |
-| -------------------- | ----------------------------------------------- |
-| 函数调用前后可能改变 | 函数调用前后不变                                |
+| Caller保存寄存器     | Callee保存寄存器                              |
+| -------------------- | --------------------------------------------- |
+| 函数调用前后可能改变 | 函数调用前后不变                              |
 | 会被Callee污染       | 需要Callee维护，防止污染<br/>“谁污染，谁治理” |
 
 ### 程序的位置
@@ -329,17 +334,18 @@ Callee-saved指的是，在调用函数时，Callee需要保存的寄存器，�
         line((), (rel: (0, -0.8)))
       },
     )
-  },
+
+},
 )
 `} />
 
 其中：
+
 - `Reserved`：保留空间，系统调用、io等就在这里
 - `Text`：代码段，由`pc`指向当前代码的位置
 - `Static`：静态数据(即全局变量)
 - `Dynamic Data`：动态数据，`malloc`分配的空间就在这里
--  `Stack`：栈。
-
+- `Stack`：栈。
 
 ## 小结
 
