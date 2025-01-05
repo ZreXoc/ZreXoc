@@ -1,0 +1,57 @@
+---
+title: Riscv学习笔记
+category: technique
+tags:
+  - Riscv
+summary: 算术、逻辑、分支控制、加载储存、函数调用跳转
+description:
+  riscv中常用的指令，包括算术运算、逻辑运算、分支控制、伪指令、加载与储存、函数调用与跳转。
+  以及对栈、寄存器、立即数的一些概念的简单介绍。
+
+preview: src/assets/icons/riscv.svg
+draft: true
+---
+
+`CALL`：`Compile`，`Assemble`，`Link`，`Load`。
+
+| 步骤 | 产物 |
+| --- | --- |
+| | `.c` |
+| 编译 | `.s` |
+| 汇编 | `.o`(object file) |
+
+## 汇编
+
+### 目标文件格式
+
+- 头部(header)：元信息
+- 代码段(text segment)：代码
+- 数据段(data segment)：全局变量、常量、静态变量
+- 重定向信息(relocation information)：链接时需要修改的符号地址映射表
+- 符号表(symbol table)：符号和地址的映射表
+- 调试信息(debug information)
+
+三次遍历：
+1. 翻译伪代码
+2. 记录符号位置
+3. 将符号替换为实际位置
+
+重新定位表：
+- 符号表：符号名和符号地址的映射表
+- 重定位表：链接时需要修改的符号地址映射表
+位置无关代码（Position-Independent
+Code，PIC），即只与`pc`有关，和代码绝对位置无关，移动代码段位置不会影响代码的运行。
+
+## 链接
+
+将多个目标文件（object file）合并成一个可执行文件（executable file）。
+
+链接必须是串行的，而编译可以是并行的，所以链接有时会成为整个编译过程的瓶颈。
+
+步骤：
+1. 将所有目标文件中的代码段合并到一个文件中
+2. 将所有目标文件中的数据段合并到一个文件中
+3. 解决符号引用
+
+## 装载
+将可执行文件加载到内存中运行。
