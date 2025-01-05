@@ -1,16 +1,16 @@
 ---
-import { Breadcrumbs } from "astro-breadcrumbs";
-import { ClientRouter } from "astro:transitions";
-import "../style.css";
-import "astro-breadcrumbs/breadcrumbs.css";
+import { Breadcrumbs } from 'astro-breadcrumbs';
+import { ClientRouter } from 'astro:transitions';
+import '../style.css';
+import 'astro-breadcrumbs/breadcrumbs.css';
 interface Props {
   title: string;
   className?: string;
-  withHeader?: boolean
+  withHeader?: boolean;
 }
-import Gtag from './Gtag.astro'
+import Gtag from './Gtag.astro';
 
-const { title, className,withHeader=true } = Astro.props;
+const { title, className, withHeader = true } = Astro.props;
 ---
 
 <!doctype html>
@@ -21,38 +21,47 @@ const { title, className,withHeader=true } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="baidu-site-verification" content="codeva-BON0dC1rgd" />
     <title>{title}</title>
-    <Gtag/>
+    <Gtag />
     <ClientRouter />
   </head>
   <body class={`bg-slate-100 ${className}`}>
-    {withHeader?
-    // TODO: show closest header
-    <header class="flex flex-row sticky top-0 h-6 bg-slate-400 z-10">
-      <Breadcrumbs excludeCurrentPage={true}>
-        <svg
-          slot="index"
-          aria-label="Home Page"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          ><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z">
-          </path><polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
-        <span slot="separator" class="nav-sep h-full w-4 text-right" style={{}}
-          >/</span
-        >
-      </Breadcrumbs>
-      <h2 class="bg-slate-200 px-4 -translate-x-4 -z-[1] clip-rt2lb">
-        {title}
-      </h2>
-    </header>:null}
+    {
+      withHeader ? (
+        // TODO: show closest header
+        <header class="flex flex-row sticky top-0 h-6 w-fit bg-slate-100 z-10 clip-rt2lb">
+          <Breadcrumbs excludeCurrentPage={true}>
+            <svg
+              slot="index"
+              aria-label="Home Page"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span
+              slot="separator"
+              class="nav-sep h-full w-4 text-right"
+            >
+              /
+            </span>
+          </Breadcrumbs>
+          <span class="bg-slate-200 px-4 -translate-x-4 -z-[1] clip-rt2lb">
+            {title}
+          </span>
+          <span id="active-header" class="bg-slate-100 px-4 -translate-x-4 -z-[1]"></span>
+        </header>
+      ) : null
+    }
     <slot />
   </body>
 </html>
@@ -62,16 +71,16 @@ const { title, className,withHeader=true } = Astro.props;
     clip-path: polygon(
       0 0,
       100% 0%,
-      0.05em 100%,
+      0.1em 100%,
       0% 100%
     ); /* TODO: extruct slash separator component */
-    background-color: theme("colors.slate.300");
+    background-color: theme('colors.slate.300');
   }
 </style>
 
 <style is:global>
   .c-breadcrumbs__separator {
-    filter: drop-shadow(0.05em 0 0 black);
+    filter: drop-shadow(0.1em 0 0 theme('colors.slate.400'));
   }
   astro-breadcrumbs {
     display: flex;
@@ -81,7 +90,7 @@ const { title, className,withHeader=true } = Astro.props;
   astro-breadcrumbs ol.c-breadcrumbs__crumbs {
     width: fit-content;
     height: 100%;
-    background-color: theme("colors.slate.300");
+    background-color: theme('colors.slate.300');
     padding: 0 1em 0 0.5em;
     clip-path: polygon(0 0, 100% 0%, calc(100% - 1em) 100%, 0% 100%);
   }

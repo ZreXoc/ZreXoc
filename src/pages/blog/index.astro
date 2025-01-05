@@ -8,7 +8,6 @@ import PostList from "@/components/post/PostList.astro";
 import { getCollection } from "astro:content";
 
 let allPosts = await getCollection("blog", ({ data }) => {
-  return true;
   return !data.draft;
 });
 
