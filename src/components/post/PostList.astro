@@ -65,11 +65,15 @@ const customTransition = {
         id,
         data: { title, type, tags, summary },
       } = entry;
+
       const { remarkPluginFrontmatter } = await render(entry);
 
       const hash = id.replaceAll('/', '-');
 
       const lastModified = dayjs(remarkPluginFrontmatter.lastModified)
+        .utc()
+        .toDate();
+      const createdAt = dayjs(remarkPluginFrontmatter.createdAt)
         .utc()
         .toDate();
 
@@ -103,8 +107,7 @@ const customTransition = {
                 </div>
                 <div slot="footer">
                   <p>
-                    <FormattedDate date={lastModified} />
-                    {entry.data.type}
+                    <FormattedDate date={createdAt} />
                   </p>
                 </div>
               </Hex>

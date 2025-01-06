@@ -8,9 +8,10 @@ import { getCollection, type CollectionEntry, render } from 'astro:content';
 import { toIcon } from '@/utils/icon';
 import { Icon } from 'astro-icon/components';
 import FormattedDate from '@/components/common/FormattedDate.astro';
+import { getBlogCollection } from '@/getCollection';
 
 export async function getStaticPaths() {
-  const blogEntries: CollectionEntry<'blog'>[] = await getCollection('blog');
+  const blogEntries: CollectionEntry<'blog'>[] = await getBlogCollection();
 
   return blogEntries.map((entry) => ({
     params: { slug: entry.id },
@@ -144,7 +145,6 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
         );
         if (minIdx >= 0) {
           const closestHeading = headings[minIdx];
-          console.log(window.scrollY, window.innerHeight, tops[minIdx]);
           if (closestHeading.textContent)
             setActiveHeader(closestHeading.textContent);
         }

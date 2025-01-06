@@ -3,7 +3,7 @@ const map = {
   'logos:astro-icon': ['astro'],
   'logos:nodejs-icon': ['nodejs'],
   riscv: ['riscv'],
-  discrete: ['discrete'],
+  set: ['discrete'],
 };
 export function toIcon(t: string, fallback?: string) {
   t = t.toLowerCase();

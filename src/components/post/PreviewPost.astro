@@ -19,13 +19,13 @@ const { remarkPluginFrontmatter } = await render(entry);
 const { minutesRead } = remarkPluginFrontmatter;
 
 const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
+
 ---
 
 <style>
   .preview-post.active .description {
     animation: fade 200ms;
-  }
-  .preview-post.active .image {
+  } .preview-post.active .image {
     animation: rotate 200ms;
   }
 
@@ -46,16 +46,16 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
     0% {
       opacity: 0.9;
       transform: rotate(0deg);
-      filter: drop-shadow(0px 0px 0px);
+      filter: drop-shadow(theme('colors.slate.50') 0px 0px 0px);
     }
 
     60% {
-      filter: drop-shadow(12px 12px 0px);
+      filter: drop-shadow(theme('colors.slate.50') 12px 12px 0px);
     }
     100% {
       opacity: 1;
       transform: rotate(4deg);
-      filter: drop-shadow(24px 24px 0px);
+      filter: drop-shadow(theme('colors.slate.50') 24px 24px 0px);
     }
   }
 </style>
@@ -64,11 +64,11 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
   class="preview-post h-full w-full pl-8 lg:pl-[10%] border-solid border-slate-300"
 >
   <div
-    class="image w-full max-w-96 lg:max-w-[28rem] mb-12 aspect-square bg-slate-600 text-white rotate-[4deg] drop-shadow-[24px_24px_0px] shadow-lg"
+    class="image w-full max-w-96 lg:max-w-[28rem] mb-12 aspect-square bg-slate-100 text-slate-50 rotate-[4deg] drop-shadow-[24px_24px_0px] shadow-lg"
   >
     {
       entry.data.preview ? (
-        <Image class="w-full h-full object-cover" src={entry.data.preview} alt={entry.data.title} />
+        <Image class="w-full h-full object-cover text-slate-700" src={entry.data.preview} alt={entry.data.title} />
         ) : <!--image placeholder-->
     }
   </div>

@@ -10,7 +10,7 @@ import rehypeJargon from 'rehype-jargon';
 import { jargon } from './src/content/jargon.mjs';
 import rehypeCallouts from 'rehype-callouts';
 import { remarkReadingTime } from './remark-reading-time.mjs';
-import { remarkModifiedTime } from './remark-modified-time.mjs';
+import { remarkFileTime } from './remark-file-time.mjs';
 import rehypeParse from 'rehype-parse';
 import {
   remarkExtendedTable,
@@ -51,7 +51,7 @@ export default defineConfig({
       //remarkRuby,
       [remarkToc, { heading: '目录', maxDepth: 3 }],
       remarkReadingTime,
-      remarkModifiedTime,
+      remarkFileTime,
     ],
 
     remarkRehype: {

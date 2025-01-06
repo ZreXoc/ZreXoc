@@ -17,8 +17,6 @@ export function getRecentVisibleElement(
         const element = entry.target as HTMLElement;
         const ratio = entry.intersectionRatio;
 
-        console.log(element, ratio, closestRatio);
-
         // 找到与视口交叉比例最大的元素
         if (ratio > closestRatio) {
           closestRatio = ratio;

@@ -5,29 +5,10 @@ import PreviewPost from '@components/post/PreviewPost.astro';
 
 import PostList from '@/components/post/PostList.astro';
 
-import { getCollection, type CollectionEntry } from 'astro:content';
-import { EntryTreeBuilder } from '@utils/content';
+import { getBlogCollection } from '@/getCollection';
 
-let entries = await getCollection('blog', ({ data }) => {
-  return !data.draft;
-});
+let entries = await getBlogCollection();
 
-
-//const fileTree = buildFileTree(allPosts);
-//console.log(fileTree.children[0]);
-//const preOrderResult = flattenTree(fileTree);
-//allPosts = preOrderResult as CollectionEntry<'blog'>[];
-
-
-const fileTreeBuilder = EntryTreeBuilder<'blog'>('file');
-const fileTree = fileTreeBuilder.buildTree(entries);
-const flattenedTree = fileTreeBuilder.flattenTree(fileTree);
-entries = flattenedTree
-
-console.log(entries.map(({id}) => id));
-// allPosts = [...allPosts, ...allPosts];
-// allPosts = [...allPosts, ...allPosts];
-// allPosts = [...allPosts, ...allPosts];
 ---
 
 <script>

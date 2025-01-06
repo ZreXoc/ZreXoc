@@ -5,7 +5,6 @@ tags:
   - Riscv
 summary: Riscv学习中的一些坑，希望能让大家少走一些弯路。
 description: Riscv学习中的一些坑，希望能让大家少走一些弯路。
-preview: src/assets/icons/riscv.svg
 ---
 
 ## 目录

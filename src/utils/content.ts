@@ -7,10 +7,10 @@ interface Node<T extends CollectionKey> {
 }
 
 function EntryTreeBuilder<T extends CollectionKey>(
-  type: 'file' | 'time',
+  type: 'series' | 'time' = 'series',
 ): BaseTreeBuilder<T> {
   switch (type) {
-    case 'file':
+    case 'series':
       return new FileTreeBuilder<T>();
     case 'time':
       return new TimeTreeBuilder<T>();
@@ -20,22 +20,23 @@ function EntryTreeBuilder<T extends CollectionKey>(
 }
 abstract class BaseTreeBuilder<T extends CollectionKey> {
   // 通用的先序遍历方法
-  protected traverseTree(node: Node<T>, result: CollectionEntry<T>[]): void {
+  public *traverseTree(
+    node: Node<T>,
+  ): Generator<CollectionEntry<T>, void, any> {
     if (node.entry) {
-      result.push(node.entry);
+      yield node.entry;
     }
 
     if (node.children) {
       for (const child of node.children) {
-        this.traverseTree(child, result);
+        yield* this.traverseTree(child);
       }
     }
   }
 
   // 通用的打平树方法
   public flattenTree(node: Node<T>): CollectionEntry<T>[] {
-    const result: CollectionEntry<T>[] = [];
-    this.traverseTree(node, result);
+    const result: CollectionEntry<T>[] = Array.from(this.traverseTree(node));
     return result;
   }
 
