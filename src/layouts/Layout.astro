@@ -30,7 +30,7 @@ const { title, className, withHeader = true } = Astro.props;
     {
       withHeader ? (
         // TODO: show closest header
-        <header class="flex flex-row sticky top-0 h-6 w-fit bg-slate-100 z-10 clip-rt2lb">
+        <header class="flex flex-row sticky top-0 h-6 w-fit bg-slate-100 z-10 clip-rt2lb-r">
           <Breadcrumbs excludeCurrentPage={true}>
             <svg
               slot="index"
@@ -48,17 +48,17 @@ const { title, className, withHeader = true } = Astro.props;
               <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
               <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
-            <span
-              slot="separator"
-              class="nav-sep h-full w-4 text-right"
-            >
+            <span slot="separator" class="nav-sep h-full w-4 text-right">
               /
             </span>
           </Breadcrumbs>
-          <span class="bg-slate-200 px-4 -translate-x-4 -z-[1] clip-rt2lb">
+          <span class="bg-slate-200 px-4 -translate-x-4 -z-[1] clip-rt2lb-r">
             {title}
           </span>
-          <span id="active-header" class="bg-slate-100 px-4 -translate-x-4 -z-[1]"></span>
+          <span
+            id="active-header"
+            class="bg-slate-100 px-4 -translate-x-4 -z-[1]"
+          />
         </header>
       ) : null
     }
@@ -95,9 +95,6 @@ const { title, className, withHeader = true } = Astro.props;
     clip-path: polygon(0 0, 100% 0%, calc(100% - 1em) 100%, 0% 100%);
   }
 
-  .clip-rt2lb {
-    clip-path: polygon(0 0, 100% 0%, calc(100% - 1em) 100%, 0% 100%);
-  }
   @keyframes side-right {
     0% {
       opacity: 0;

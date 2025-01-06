@@ -1,31 +1,33 @@
 ---
-import { render, type CollectionEntry } from "astro:content";
-import Hex from "../Hex.astro";
-import { Icon } from "astro-icon/components";
-import { toIcon } from "@/utils/icon";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import FormattedDate from "../common/FormattedDate.astro";
+import { render, type CollectionEntry } from 'astro:content';
+import { Hex, Skew } from '@components/ui';
+
+import { Icon } from 'astro-icon/components';
+import { toIcon } from '@/utils/icon';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import FormattedDate from '../common/FormattedDate.astro';
 dayjs.extend(utc);
 
 export interface Props {
-  allPosts: CollectionEntry<"blog">[];
-  current?: CollectionEntry<"blog">;
+  entries: CollectionEntry<'blog'>[];
+  current?: CollectionEntry<'blog'>;
 }
 
-const { allPosts, current } = Astro.props;
+const { entries, current } = Astro.props;
 
 const anim = {
   old: {
-    name: "fade",
-    duration: "0.5s",
-    easing: "ease-in-out",
+    name: 'fade',
+    duration: '0.5s',
+    easing: 'ease-in-out',
   },
   new: {
-    name: "side-right",
-    duration: "0.5s",
-    easing: "ease-in-out",
-  }, };
+    name: 'side-right',
+    duration: '0.5s',
+    easing: 'ease-in-out',
+  },
+};
 const customTransition = {
   forwards: anim,
   backwards: anim,
@@ -58,48 +60,55 @@ const customTransition = {
   data-selected={current?.id}
 >
   {
-    allPosts.map(async (entry) => {
+    entries.map(async (entry) => {
       const {
         id,
-        data: { title, tags, summary },
+        data: { title, type, tags, summary },
       } = entry;
       const { remarkPluginFrontmatter } = await render(entry);
 
-      const hash = id.replaceAll('/', '-')
+      const hash = id.replaceAll('/', '-');
 
       const lastModified = dayjs(remarkPluginFrontmatter.lastModified)
         .utc()
-        .toDate()
+        .toDate();
 
-      // TODO: fix chrome history 
+      // TODO: fix chrome history
       return (
-        <li
-          class="w-[100vw] post-list cursor-pointer"
-          id={hash}
-          data-id={id}
+      <li class=`${type} w-[100vw] post-list cursor-pointer` id={hash} data-id={id}>
+          <a
+            onclick={`history.replaceState({...history.state, id: '${id}' }, '', '#${id}');location.href = '/blog/${id}';`}
+            href={`/blog/${id}`}
+            data-astro-prefetch
           >
-        <a onclick={`history.replaceState({...history.state, id: '${id}' }, '', '#${id}');location.href = '/blog/${id}';`} href={`/blog/${id}`} data-astro-prefetch>
-            <Hex>
-              <div
-                slot="content"
-                class="flex flex-row relative prose prose-h2:mb-2 prose-h2:mt-0"
-              >
-                <div class="w-fit min-w-64">
-                  <h2 class="text-3xl pl-2">{title}</h2>
-                  <p>{summary}</p>
+            {type === 'scenario' ? (
+            <Skew >
+              <span>{title}</span>
+            </Skew>
+            ) : (
+              <Hex>
+                <div
+                  slot="content"
+                  class="flex flex-row relative prose prose-h2:mb-2 prose-h2:mt-0"
+                >
+                  <div class="w-fit min-w-64">
+                    <h2 class="text-3xl pl-2">{title}</h2>
+                    <p>{summary}</p>
+                  </div>
+                  <div class="flex gap-2 -z-10">
+                    {tags.slice(0, 1).map((t) => (
+                      <Icon class="w-24 h-24 icon" name={toIcon(t)} />
+                    ))}
+                  </div>
                 </div>
-                <div class="flex gap-2 -z-10">
-                  {tags.slice(0,1).map((t) => (
-                    <Icon class="w-24 h-24 icon" name={toIcon(t)} />
-                  ))}
+                <div slot="footer">
+                  <p>
+                    <FormattedDate date={lastModified} />
+                    {entry.data.type}
+                  </p>
                 </div>
-              </div>
-              <div slot="footer">
-                <p>
-                  <FormattedDate date={lastModified} />
-                </p>
-              </div>
-            </Hex>
+              </Hex>
+            )}
           </a>
         </li>
       );

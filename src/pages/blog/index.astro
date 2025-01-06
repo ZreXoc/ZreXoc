@@ -1,17 +1,30 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import Hex from "@components/Hex.astro";
-import PreviewPost from "@components/post/PreviewPost.astro";
+import * as path from 'path';
+import Layout from '@/layouts/Layout.astro';
+import PreviewPost from '@components/post/PreviewPost.astro';
 
-import PostList from "@/components/post/PostList.astro";
+import PostList from '@/components/post/PostList.astro';
 
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { EntryTreeBuilder } from '@utils/content';
 
-let allPosts = await getCollection("blog", ({ data }) => {
+let entries = await getCollection('blog', ({ data }) => {
   return !data.draft;
 });
 
-//console.log(allPosts);
+
+//const fileTree = buildFileTree(allPosts);
+//console.log(fileTree.children[0]);
+//const preOrderResult = flattenTree(fileTree);
+//allPosts = preOrderResult as CollectionEntry<'blog'>[];
+
+
+const fileTreeBuilder = EntryTreeBuilder<'blog'>('file');
+const fileTree = fileTreeBuilder.buildTree(entries);
+const flattenedTree = fileTreeBuilder.flattenTree(fileTree);
+entries = flattenedTree
+
+console.log(entries.map(({id}) => id));
 // allPosts = [...allPosts, ...allPosts];
 // allPosts = [...allPosts, ...allPosts];
 // allPosts = [...allPosts, ...allPosts];
@@ -28,10 +41,10 @@ let allPosts = await getCollection("blog", ({ data }) => {
   let datum: number;
 
   const pair = new Map<string, [HTMLLIElement | null, HTMLDivElement | null]>();
-  document.addEventListener("astro:page-load", () => {
-    container = document.getElementById("hexlists");
-    hexlists = document.querySelectorAll<HTMLLIElement>("#hexlists .post-list");
-    previews = document.querySelectorAll<HTMLDivElement>("#previews div");
+  document.addEventListener('astro:page-load', () => {
+    container = document.getElementById('hexlists');
+    hexlists = document.querySelectorAll<HTMLLIElement>('#hexlists .post-list');
+    previews = document.querySelectorAll<HTMLDivElement>('#previews div');
 
     hexlists.forEach((li) => {
       const id = li.dataset.id;
@@ -50,12 +63,12 @@ let allPosts = await getCollection("blog", ({ data }) => {
     });
 
     setOffset();
-    container?.addEventListener("scroll", setOffset);
+    container?.addEventListener('scroll', setOffset);
 
     hexlists.forEach((el, idx) => {
-      const id = el.dataset["id"];
+      const id = el.dataset['id'];
       if (id)
-        el.addEventListener("mouseover", (e) => {
+        el.addEventListener('mouseover', (e) => {
           switchSelected(id);
         });
     });
@@ -74,14 +87,15 @@ let allPosts = await getCollection("blog", ({ data }) => {
     const containerRect = container.getBoundingClientRect();
     const containerHeight = containerRect.height; // 获取元素的位置信息
     hexlists.forEach((el, idx) => {
+      if (el.classList.contains('scenario')) return;
       const childRect = el.getBoundingClientRect();
-      if (selectedId == el.dataset["id"]) {
+      if (selectedId == el.dataset['id']) {
         /*        const anim = el.animate([{ transform: "translateX(0)" }], 30);
         anim.addEventListener("finish", () => {
           el.style.transform = "unset";
         });
         */
-        el.classList.add("selected");
+        el.classList.add('selected');
         return;
       }
 
@@ -114,10 +128,10 @@ let allPosts = await getCollection("blog", ({ data }) => {
 
     unselect(selectedId);
 
-    preview.classList.remove("hidden");
-    preview.classList.add("contents");
-    preview.getElementsByClassName("preview-post")[0]?.classList.add("active");
-    li.classList.add("selected");
+    preview.classList.remove('hidden');
+    preview.classList.add('contents');
+    preview.getElementsByClassName('preview-post')[0]?.classList.add('active');
+    li.classList.add('selected');
 
     selectedId = id;
 
@@ -133,7 +147,7 @@ let allPosts = await getCollection("blog", ({ data }) => {
     if (!li) return;
     container?.scroll({
       top: li.offsetTop - datum,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   }
 
@@ -143,11 +157,11 @@ let allPosts = await getCollection("blog", ({ data }) => {
     if (!p) return;
     const [li, preview] = p;
 
-    preview?.classList.add("hidden");
+    preview?.classList.add('hidden');
     preview
-      ?.getElementsByClassName("preview-post")[0]
-      ?.classList.remove("active");
-    li?.classList.remove("selected");
+      ?.getElementsByClassName('preview-post')[0]
+      ?.classList.remove('active');
+    li?.classList.remove('selected');
   }
 </script>
 
@@ -156,9 +170,9 @@ let allPosts = await getCollection("blog", ({ data }) => {
     <div class="flex flex-grow-1 flex-col h-full w-[100vw] lg:w-[60vw]">
       <div id="previews" class="mt-[12%] w-full flex-1 p-8">
         {
-          allPosts.map((entry, idx) => {
+          entries.map((entry, idx) => {
             return (
-              <div class={"hidden"} data-id={entry.id}>
+              <div class={'hidden'} data-id={entry.id}>
                 <PreviewPost entry={entry} />
               </div>
             );
@@ -167,7 +181,7 @@ let allPosts = await getCollection("blog", ({ data }) => {
       </div>
     </div>
     <div class="max-w-[50%] lg:max-w-[40%] overflow-x-hidden">
-      <PostList {allPosts} />
+      <PostList {entries} />
     </div>
   </main>
 </Layout>

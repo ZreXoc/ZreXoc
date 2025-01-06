@@ -5,19 +5,19 @@
  * @returns 返回一个节流后的函数
  */
 export function debounce<T extends (...args: any[]) => void>(
-    func: T,
-    limit: number = 100
+  func: T,
+  limit: number = 100,
 ): (...args: Parameters<T>) => void {
-    let inThrottle = false; // 标记是否处于节流状态
+  let inThrottle = false; // 标记是否处于节流状态
 
-    return (...args: Parameters<T>): void => {
-        if (!inThrottle) {
-            // 如果不在节流状态，执行函数
-            func(...args);
-            inThrottle = true; // 进入节流状态
-            setTimeout(() => {
-                inThrottle = false; // 时间间隔结束后解除节流状态
-            }, limit);
-        }
-    };
+  return (...args: Parameters<T>): void => {
+    if (!inThrottle) {
+      // 如果不在节流状态，执行函数
+      func(...args);
+      inThrottle = true; // 进入节流状态
+      setTimeout(() => {
+        inThrottle = false; // 时间间隔结束后解除节流状态
+      }, limit);
+    }
+  };
 }

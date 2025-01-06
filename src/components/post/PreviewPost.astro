@@ -13,7 +13,7 @@ interface Props {
   entry: CollectionEntry<"blog">;
 }
 
-const { entry } = Astro.props;
+const { entry} = Astro.props;
 const data = entry.data;
 const { remarkPluginFrontmatter } = await render(entry);
 const { minutesRead } = remarkPluginFrontmatter;

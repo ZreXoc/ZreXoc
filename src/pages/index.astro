@@ -1,24 +1,24 @@
 ---
-import ConnectionLine from "@/components/ConnectionLine.astro";
-import SquareLink from "../components/Link/SquareLink.astro";
-import Layout from "../layouts/Layout.astro";
+import ConnectionLine from '@/components/ConnectionLine.astro';
+import SquareLink from '../components/Link/SquareLink.astro';
+import Layout from '../layouts/Layout.astro';
 
 const sections: Array<{
   href: string;
   title: string;
 }> = [
   {
-    href: "Projects",
-    title: "Projects",
+    href: 'Projects',
+    title: 'Projects',
   },
   {
-    href: "blog",
-    title: "Blog",
+    href: 'blog',
+    title: 'Blog',
   },
 
   {
-    href: "about",
-    title: "About",
+    href: 'about',
+    title: 'About',
   },
 ];
 
@@ -34,8 +34,12 @@ for (let i = 0; i < sections.length - 1; i++) {
   withHeader={false}
 >
   <main class="mx-0 w-full max-w-[1200px] h-[100vh]">
-    <h1 class="text-center text-4xl font-kingsgmb my-4 lg:text-6xl">XiC's Blog</h1>
-    <h1 class="text-center text-4xl font-HYAlzheimer my-8 lg:text-6xl">熙晨的博客</h1>
+    <h1 class="text-center text-4xl font-kingsgmb my-4 lg:text-6xl">
+      XiC's Blog
+    </h1>
+    <h1 class="text-center text-4xl font-HYAlzheimer my-8 lg:text-6xl">
+      熙晨的博客
+    </h1>
     <div class="pt-16 w-full flex justify-evenly items-center font-kingsgmb">
       {
         sections.map(({ href, title }, i, arr) => (
@@ -45,7 +49,7 @@ for (let i = 0; i < sections.length - 1; i++) {
             class="SquareLink transition-all hover:translate-y-[20%] hover:drop-shadow-md"
             size={i === Math.floor((arr.length - 1) / 2) ? 24 : 20}
             attrs={{
-              "data-clnode": title,
+              'data-clnode': title,
             }}
           />
         ))

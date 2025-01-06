@@ -9,11 +9,11 @@ export interface Props {
 let { globalAttr, connections } = Astro.props;
 
 globalAttr = {
-  stroke: "#d4d4d8",
-  "stroke-width": 2,
-  fill: "none",
+  stroke: '#d4d4d8',
+  'stroke-width': 2,
+  fill: 'none',
   //"stroke-dasharray" : "1% 10%",
-  "stroke-linecap": "round",
+  'stroke-linecap': 'round',
   ...globalAttr,
 };
 ---
@@ -57,9 +57,9 @@ globalAttr = {
 </svg>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
+  document.addEventListener('astro:page-load', () => {
     const pathEls: NodeListOf<SVGPathElement> =
-      document.querySelectorAll("#cl-bg .cl-line");
+      document.querySelectorAll('#cl-bg .cl-line');
     if (!pathEls) {
       console.error(`svg ${pathEls} not found`);
       return;
@@ -84,8 +84,8 @@ globalAttr = {
           ym = (y1 + y2) / 2;
 
         pathEl.setAttribute(
-          "d",
-          `M ${x1} ${y1} Q ${(xm + x1) / 2} ${y1} ${xm} ${ym} T ${x2} ${y2}`
+          'd',
+          `M ${x1} ${y1} Q ${(xm + x1) / 2} ${y1} ${xm} ${ym} T ${x2} ${y2}`,
         );
       }, 1);
     });

@@ -32,4 +32,11 @@
   .hex-clip {
     clip-path: polygon(25px 0%, 100% 0, 100% 100%, 15px 100%, 0 75%);
   }
+
+  .clip-rt2lb-r {
+    clip-path: polygon(0 0, 100% 0%, calc(100% - 1em) 100%, 0% 100%);
+  }
+  .clip-rt2lb-l {
+    clip-path: polygon(1em 0, 100% 0%, 100% 100%, 0% 100%);
+  }
 }
