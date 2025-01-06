@@ -89,7 +89,7 @@ class FileTreeBuilder<T extends CollectionKey> extends BaseTreeBuilder<T> {
             currentLevel.children = [];
           }
           // 按顺序插入节点
-          if (entry.data.type === 'scenario') {
+          if (entry.data.type === 'series') {
             currentLevel.children.unshift(node);
           } else {
             currentLevel.children.push(node);
@@ -147,7 +147,7 @@ export function buildFileTree<T extends CollectionKey>(
           currentLevel.children = [];
         }
         // 按顺序插入节点
-        if (entry.data.type === 'scenario') currentLevel.children.unshift(node);
+        if (entry.data.type === 'series') currentLevel.children.unshift(node);
         else currentLevel.children.push(node);
       }
 

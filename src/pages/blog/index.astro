@@ -87,7 +87,7 @@ console.log(entries.map(({id}) => id));
     const containerRect = container.getBoundingClientRect();
     const containerHeight = containerRect.height; // 获取元素的位置信息
     hexlists.forEach((el, idx) => {
-      if (el.classList.contains('scenario')) return;
+      if (el.classList.contains('series')) return;
       const childRect = el.getBoundingClientRect();
       if (selectedId == el.dataset['id']) {
         /*        const anim = el.animate([{ transform: "translateX(0)" }], 30);
