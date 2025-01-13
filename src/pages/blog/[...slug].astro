@@ -156,7 +156,7 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
     if (activeHeaderEl) activeHeaderEl.innerText = text;
   }
 </script>
-<Layout title={entry.data.title}>
+<Layout title={entry.data.title} withFooter={true}>
   <main class="w-full py-4">
     <div class="mx-auto prose lg:prose-xl prose-code:font-code">
       <h1>{data.title}</h1>
@@ -181,9 +181,7 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
         <span>{minutesRead?.words}字</span>
         <span>{minutesRead?.text}</span>
       </p>
-      <hr />
       <Content />
-      <hr />
     </div>
   </main>
 </Layout>

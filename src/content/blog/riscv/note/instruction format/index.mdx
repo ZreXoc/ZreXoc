@@ -73,6 +73,8 @@ field(2, [opcode], 6, 0)
 
 `funct7` 则用于表示一些比较特殊的操作，比如`sub`指令的`funct7`为`0100000`，这个`1`就是指要扩展符号位，后面的`srli`和`srai`就只有这里不同。
 
+实际上，我们只使用`opcode`的高5位来区分指令类型，使用`funct7`的第六位和`funct3`来区分具体的指令，一共也就是9位。
+
 ### "I" 类型指令
 
 **I** 类型指令用于加载等操作。
@@ -200,16 +202,19 @@ pc = pc + imm * 2;
 
 ### "J" 类型指令
 
-J 类型指令用于无条件跳转指令。这个简单。
+J 类型指令用于无条件跳转指令。这里仅有`jal`这一个指令。
 
 <Typst code={`
 #import "@preview/cetz:0.3.1"
 #import "src/content/blog/riscv/helper.typ":*
 
 #cetz.canvas({
-field(4, [imm[20|10:1|11|19:12]], 31, 12)
-field(2, [rd], 11, 7)
-field(4, [opcode], 6, 0)
+field(2, [imm[20]], 31, 31)
+field(2, [imm[10:1]], 30, 21)
+field(2, [imm[11]], 20, 20)
+field(2, [imm[19:12]], 19, 12)
+field(3, [rd], 11, 7)
+field(2, [opcode], 6, 0)
 })
 `} />
 
@@ -276,7 +281,10 @@ field(4, [opcode], 6, 0)
   hide(content("g3.south-west", []))
   hide(content((rel: (0, -0.5)), []))
   group({
-    field2([imm[20|10:1|11|19:12]], 31, 12)
+    field2(text(0.5em)[imm#linebreak() [20]], 31, 31)
+    field2([imm[10:1]], 30, 21)
+    field2(text(0.5em)[imm#linebreak() [11]], 20, 20)
+    field2([imm[19:12]], 19, 12)
     field2([rd], 11, 7)
     field2([opcode], 6, 0)
     field2([J-type], 3, 0)

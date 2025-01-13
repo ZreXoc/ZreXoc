@@ -7,10 +7,13 @@ interface Props {
   title: string;
   className?: string;
   withHeader?: boolean;
+  withFooter?: boolean;
 }
 import Gtag from './Gtag.astro';
+import { Icon } from 'astro-icon/components';
 
-const { title, className, withHeader = true } = Astro.props;
+const { title, className, withHeader = true, withFooter = false } = Astro.props;
+
 ---
 
 <!doctype html>
@@ -63,6 +66,21 @@ const { title, className, withHeader = true } = Astro.props;
       ) : null
     }
     <slot />
+    {
+      withFooter ? (
+        <footer>
+          <div class="border-t-2 border-slate-200 w-full min-w-96 max-w-[70%] mx-auto text-center text-sm text-slate-500" />
+          <div class="flex gap-4 justify-center items-center h-12">
+            <a href="https://github.com/ZreXoc">
+              <Icon name="logos:github-icon" />
+            </a>
+            <a href={`mailto:zeexoc@outlook.com?body=%0AFrom ${Astro.request.url}`}>
+              <Icon name="mdi:email" />
+            </a>
+          </div>
+        </footer>
+      ) : null
+    }
   </body>
 </html>
 
