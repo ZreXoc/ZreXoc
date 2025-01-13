@@ -124,16 +124,18 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
 </style>
 <script>
   import { debounce } from '@utils/misc';
-  let activeHeaderEl: HTMLSpanElement | null = null;
+  let activeHeaderEl: HTMLAnchorElement | null = null;
   document.addEventListener('astro:page-load', () => {
     const headings = Array.from(
       document.querySelectorAll<HTMLHeadingElement>(
         'main .prose h2, main .prose h3',
       ),
     );
-    activeHeaderEl = document.getElementById('active-header');
+    activeHeaderEl = document.getElementById(
+      'active-header',
+    ) as HTMLAnchorElement;
 
-    // 示例：监听滚动事件并获取最近的标题元素
+    // 监听滚动事件并获取最近的标题元素
     window.addEventListener(
       'scroll',
       debounce(() => {
@@ -146,19 +148,21 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
         if (minIdx >= 0) {
           const closestHeading = headings[minIdx];
           if (closestHeading.textContent)
-            setActiveHeader(closestHeading.textContent);
+            setActiveHeader(closestHeading.textContent, closestHeading.id);
         }
       }, 100),
     );
   });
 
-  function setActiveHeader(text: string) {
-    if (activeHeaderEl) activeHeaderEl.innerText = text;
+  function setActiveHeader(text: string, href?: string) {
+    if (!activeHeaderEl) return;
+    activeHeaderEl.innerText = text;
+    if (href) activeHeaderEl.href = `#${href}`;
   }
 </script>
 <Layout title={entry.data.title} withFooter={true}>
   <main class="w-full py-4">
-    <div class="mx-auto prose lg:prose-xl prose-code:font-code">
+    <div class="mx-auto prose lg:prose-xl prose-code:font-code prose-headings:scroll-m-10">
       <h1>{data.title}</h1>
       <p
         class="flex flex-row divide-x-2 divide-solid divide-slate-200 *:px-2 mb-0"

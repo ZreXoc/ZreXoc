@@ -33,7 +33,7 @@ const { title, className, withHeader = true, withFooter = false } = Astro.props;
     {
       withHeader ? (
         // TODO: show closest header
-        <header class="flex flex-row sticky top-0 h-6 w-fit bg-slate-100 z-10 clip-rt2lb-r">
+        <header class="flex flex-row sticky top-0 h-6 max-w-[70%] w-fit bg-slate-100 z-10 clip-rt2lb-r">
           <Breadcrumbs excludeCurrentPage={true}>
             <svg
               slot="index"
@@ -58,9 +58,9 @@ const { title, className, withHeader = true, withFooter = false } = Astro.props;
           <span class="bg-slate-200 px-4 -translate-x-4 -z-[1] clip-rt2lb-r">
             {title}
           </span>
-          <span
+          <a
             id="active-header"
-            class="bg-slate-100 px-4 -translate-x-4 -z-[1]"
+            class="bg-slate-100 px-4 max-w-[50%] -translate-x-4 -z-[1] cursor-pointer overflow-hidden text-nowrap text-ellipsis hover:overflow-visible hover:max-w-[unset]"
           />
         </header>
       ) : null

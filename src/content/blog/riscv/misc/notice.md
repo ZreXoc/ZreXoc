@@ -19,7 +19,8 @@ description: Riscv学习中的一些坑，希望能让大家少走一些弯路�
 刚开始跟着`CS61C`学到riscv时，我发现gcc编译出来的二进制文件由于包含了标准库导致文件很大，便选择了在汇编时不使用标准库：
 
 ```sh
-riscv32-unknown-elf-gcc -g -nostdlib -static "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" ```
+riscv32-unknown-elf-gcc -g -nostdlib -static "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)"
+```
 
 没想到就这个举动导致我花了整整一个下午来排查。>:(
 
