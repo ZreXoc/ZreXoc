@@ -8,6 +8,7 @@ import { getCollection, type CollectionEntry, render } from 'astro:content';
 import { toIcon } from '@/utils/icon';
 import { Icon } from 'astro-icon/components';
 import FormattedDate from '@/components/common/FormattedDate.astro';
+import Giscus from '@/components/common/Giscus.astro';
 import { getBlogCollection } from '@/getCollection';
 
 export async function getStaticPaths() {
@@ -160,9 +161,12 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
     if (href) activeHeaderEl.href = `#${href}`;
   }
 </script>
+
 <Layout title={entry.data.title} withFooter={true}>
   <main class="w-full py-4">
-    <div class="mx-auto prose lg:prose-xl prose-code:font-code prose-headings:scroll-m-10">
+    <div
+      class="mx-auto prose lg:prose-xl prose-code:font-code prose-headings:scroll-m-10"
+    >
       <h1>{data.title}</h1>
       <p
         class="flex flex-row divide-x-2 divide-solid divide-slate-200 *:px-2 mb-0"
@@ -186,6 +190,9 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified).utc().toDate();
         <span>{minutesRead?.text}</span>
       </p>
       <Content />
+      <Giscus />
+      <!--<div class="giscus"></div>-->
+      <!--<div class=".giscus-frame"></div>-->
     </div>
   </main>
 </Layout>
